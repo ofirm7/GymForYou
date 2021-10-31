@@ -3,34 +3,37 @@ package com.example.gymforyou;
 public class User {
 
     private String username;
-    private String pasworrd;
+    private String password;
 
-    public User(String username, String pasworrd) {
+    public User(String username, String password) {
         this.username = username;
-        this.pasworrd = pasworrd;
+        this.password = password;
+    }
+
+    public User() {
     }
 
     public String getUsername() {
         return username;
     }
 
-    public String getPasworrd() {
-        return pasworrd;
+    public String getPassword() {
+        return password;
     }
 
     public void setUsername(String username) {
         this.username = username;
     }
 
-    public void setPasworrd(String pasworrd) {
-        this.pasworrd = pasworrd;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     @Override
     public String toString() {
         return "User{" +
                 "username='" + username + '\'' +
-                ", pasworrd='" + pasworrd + '\'' +
+                ", password='" + password + '\'' +
                 '}';
     }
 

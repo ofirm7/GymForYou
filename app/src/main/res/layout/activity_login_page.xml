@@ -43,7 +43,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="login"
-        android:textColor="@color/black"
+        android:textColor="#fff"
         android:textSize="30dp"
         android:background="#fff"
         android:layout_gravity="center"
@@ -54,11 +54,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="forgot password?"
-        android:textColor="@color/purple_700"
+        android:textColor="#DD3A3ADC"
         android:textSize="15dp"
         android:layout_marginTop="7dp"
         android:layout_gravity="center"
-        android:background="#fff"
+        android:background="#FFFFFF"
         />
 
 

@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "541893507604",
+    "firebase_url": "https://gymforyou-81cb2-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "gymforyou-81cb2",
+    "storage_bucket": "gymforyou-81cb2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:541893507604:android:0520b5e786ecc6d9340501",
+        "android_client_info": {
+          "package_name": "com.example.gymforyou"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "541893507604-glov7qat5n9f4ki6i3a1osc77lqdkav2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCjkfuHRRUrZSuvbB8AxoIn6nN47cJJU60"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "541893507604-glov7qat5n9f4ki6i3a1osc77lqdkav2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

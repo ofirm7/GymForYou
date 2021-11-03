@@ -117,7 +117,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             return true;
         }
         else if (id == R.id.action_register) {
-            Toast.makeText(this,"you selected register",Toast.LENGTH_LONG).show();
+            Intent intent=new Intent(this,SignUp.class);
+            startActivityForResult(intent, 0);
             return true;
         }
         else if (id == R.id.action_exit){

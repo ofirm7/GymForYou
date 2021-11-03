@@ -2,6 +2,7 @@ package com.example.gymforyou;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.icu.lang.UScript;
 import android.os.Bundle;
 import android.view.View;
@@ -11,7 +12,7 @@ import android.widget.Toast;
 
 public class SignUp extends AppCompatActivity implements View.OnClickListener {
 
-    Button submit;
+    Button submit, toLoginFromSignUp;
     EditText email, username, pass;
     SharedPref sharedPref;
 
@@ -20,13 +21,14 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
 
+        toLoginFromSignUp = findViewById(R.id.toLoginFromSignUp);
         sharedPref = new SharedPref(this);
         submit = findViewById(R.id.submitSignUp);
         username = findViewById(R.id.usernameSignUp);
         email = findViewById(R.id.emailSignUp);
         pass = findViewById(R.id.passwordSignUp);
         submit.setOnClickListener(this);
-
+        toLoginFromSignUp.setOnClickListener(this);
     }
 
     @Override
@@ -51,6 +53,13 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
                 DataModel.users.add(new User(username.getText().toString(), pass.getText().toString()));
                 DataModel.userSave();
             }
+        }
+        else if(view == toLoginFromSignUp)
+        {
+            Intent intent=new Intent(this,LoginPage.class);
+            startActivity(intent
+            );
+            finish();
         }
     }
 }

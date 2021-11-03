@@ -52,8 +52,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
         Intent intent1 = new Intent(this, ExerciseDetailsActivity.class);
-        switch (position)
-        {
+        switch (position) {
             case 0:
                 intent1.putExtra("WE", "Exercise 1");
                 break;
@@ -74,24 +73,30 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
-        getMenuInflater().inflate(R.menu.main_menu,menu);
+        getMenuInflater().inflate(R.menu.main_menu, menu);
 
-        for(int i=0;i<menu.size();i++)
-        {
-            MenuItem item= menu.getItem(i);
+
+        for (int i = 0; i < menu.size(); i++) {
+            MenuItem item = menu.getItem(i);
             item.setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS);
         }
-        if(sharedPref.GetUsername().equals("YouRGuest"))
-        {
-            MenuItem item = menu.getItem(0);
+
+        MenuItem item;
+
+
+        if (sharedPref.GetUsername().equals("YouRGuest")) {
+            item = menu.getItem(0);
             item.setEnabled(false);
             item.setVisible(false);
 
-        }
-        else
-        {
+            item = menu.getItem(3);
+            item.setEnabled(false);
+            item.setVisible(false);
 
-            MenuItem item = menu.getItem(1);
+
+        } else {
+
+            item = menu.getItem(1);
             item.setEnabled(false);
             item.setVisible(false);
 
@@ -101,27 +106,24 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
 
             item = menu.getItem(0);
             item.setTitle(sharedPref.GetUsername());
-            }
+        }
         return true;
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
+    public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
         if (id == R.id.action_login) {
-            Intent intent=new Intent(this,LoginPage.class);
+            Intent intent = new Intent(this, LoginPage.class);
             startActivityForResult(intent, 0);
             //Toast.makeText(this,"you selected login",Toast.LENGTH_LONG).show();
             return true;
-        }
-        else if (id == R.id.action_register) {
-            Intent intent=new Intent(this,SignUp.class);
+        } else if (id == R.id.action_register) {
+            Intent intent = new Intent(this, SignUp.class);
             startActivityForResult(intent, 0);
             return true;
-        }
-        else if (id == R.id.action_exit){
+        } else if (id == R.id.action_exit) {
             sharedPref.SetUsername("YouRGuest");
             //Toast.makeText(this,"you sure you want to logout?",Toast.LENGTH_LONG).show();
             restartapp();
@@ -139,6 +141,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         startActivity(i);
         finish();
     }
+
     void restartapp() {
         Intent i = new Intent(getApplicationContext(), MainActivity.class);
         startActivity(i);

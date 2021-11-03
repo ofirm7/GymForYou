@@ -7,10 +7,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class ExerciseDetailsActivity extends AppCompatActivity {
+public class ExerciseDetailsActivity extends AppCompatActivity implements View.OnClickListener {
+
     SharedPref sharedPref;
     TextView tv;
 
@@ -20,11 +23,13 @@ public class ExerciseDetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_exercise_details);
 
-
-
         tv = findViewById(R.id.tv);
-
         tv.setText(getIntent().getStringExtra("WE"));
+    }
+
+    @Override
+    public void onClick(View view) {
+
     }
 
     @Override
@@ -37,17 +42,21 @@ public class ExerciseDetailsActivity extends AppCompatActivity {
             MenuItem item= menu.getItem(i);
             item.setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS);
         }
-        if(sharedPref.GetUsername().equals("YouRGuest"))
-        {
-            MenuItem item = menu.getItem(0);
+        MenuItem item;
+
+        if (sharedPref.GetUsername().equals("YouRGuest")) {
+            item = menu.getItem(0);
             item.setEnabled(false);
             item.setVisible(false);
 
-        }
-        else
-        {
+            item = menu.getItem(3);
+            item.setEnabled(false);
+            item.setVisible(false);
 
-            MenuItem item = menu.getItem(1);
+
+        } else {
+
+            item = menu.getItem(1);
             item.setEnabled(false);
             item.setVisible(false);
 
@@ -73,8 +82,9 @@ public class ExerciseDetailsActivity extends AppCompatActivity {
             return true;
         }
         else if (id == R.id.action_register) {
-            Toast.makeText(this,"you selected register",Toast.LENGTH_LONG).show();
-            return true;
+        Intent intent = new Intent(this, SignUp.class);
+        startActivityForResult(intent, 0);
+        return true;
         }
         else if (id == R.id.action_exit){
             sharedPref.SetUsername("YouRGuest");
@@ -82,8 +92,11 @@ public class ExerciseDetailsActivity extends AppCompatActivity {
             restartapp();
             return true;
         }
-
-
+        else if (id == R.id.action_GoHome) {
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivityForResult(intent, 0);
+            return true;
+        }
         return true;
     }
 
@@ -99,5 +112,6 @@ public class ExerciseDetailsActivity extends AppCompatActivity {
         startActivity(i);
         finish();
     }
+
 
 }

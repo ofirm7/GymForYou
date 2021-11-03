@@ -82,7 +82,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         }
 
         MenuItem item;
-
+        item = menu.getItem(4);
+        item.setEnabled(false);
+        item.setVisible(false);
 
         if (sharedPref.GetUsername().equals("YouRGuest")) {
             item = menu.getItem(0);

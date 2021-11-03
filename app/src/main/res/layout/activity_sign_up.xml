@@ -79,7 +79,6 @@
         android:textSize="15dp"
         android:layout_marginTop="7dp"
         android:layout_gravity="center"
-        android:background="#FFFFFF"
         />
 
 </LinearLayout>

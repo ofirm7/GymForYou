@@ -51,16 +51,26 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
                 return;
             } else {
 
-                boolean flag = false;
-                int temp = 0;
-                for (int i = 0; i < DataModel.users.size() && !flag; i++) {
+                boolean flagU = false;
+                boolean flagE = false;
+                int tempU = 0;
+                for (int i = 0; i < DataModel.users.size() && !flagU && !flagE; i++) {
                     if (DataModel.users.get(i).getUsername().equals(username.getText().toString())) {
-                        flag = true;
-                        temp = i;
+                        flagU = true;
+                        tempU = i;
+                    }
+                    if (DataModel.users.get(i).getEmail().equals(email.getText().toString())) {
+                        flagE = true;
                     }
                 }
-                if (flag) {
+                if (flagU && flagE) {
+                    Toast.makeText(this, "username and email are taken", Toast.LENGTH_SHORT).show();
+                    return;
+                } else if (flagU) {
                     Toast.makeText(this, "username taken", Toast.LENGTH_SHORT).show();
+                    return;
+                } else if (flagE) {
+                    Toast.makeText(this, "email already used", Toast.LENGTH_SHORT).show();
                     return;
                 }
 

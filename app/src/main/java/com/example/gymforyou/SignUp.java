@@ -13,10 +13,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class SignUp extends AppCompatActivity implements View.OnClickListener {
 
     Button submit, toLoginFromSignUp;
-    EditText email, username, pass;
+    EditText email, username, pass, passConfirmation;
     SharedPref sharedPref;
 
     @Override
@@ -30,16 +33,24 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
         username = findViewById(R.id.usernameSignUp);
         email = findViewById(R.id.emailSignUp);
         pass = findViewById(R.id.passwordSignUp);
+        passConfirmation = findViewById(R.id.passwordConfirmationSignUp);
         submit.setOnClickListener(this);
         toLoginFromSignUp.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View view) {
-        if(view == submit) {
+        if (view == submit) {
             if (username.getText().toString().equals("") || pass.getText().toString().equals("")) {
                 Toast.makeText(this, "fill in all boxes", Toast.LENGTH_SHORT).show();
+            } else if (!pass.getText().toString().equals(passConfirmation.getText().toString())) {
+                Toast.makeText(this, "passwords not same", Toast.LENGTH_SHORT).show();
+                return;
+            } else if (!isEmailValid(email.getText().toString())) {
+                Toast.makeText(this, "email is not valid", Toast.LENGTH_SHORT).show();
+                return;
             } else {
+
                 boolean flag = false;
                 int temp = 0;
                 for (int i = 0; i < DataModel.users.size() && !flag; i++) {
@@ -52,16 +63,16 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
                     Toast.makeText(this, "username taken", Toast.LENGTH_SHORT).show();
                     return;
                 }
+
                 //DataModel.users.add(new User(username.toString(), pass.toString()));
-                DataModel.users.add(new User(username.getText().toString(), pass.getText().toString()));
+                DataModel.users.add(new User(username.getText().toString(), pass.getText().toString(), pass.getText().toString()));
                 DataModel.userSave();
+                sharedPref.SetUsername(username.getText().toString());
+                finish();
             }
-        }
-        else if(view == toLoginFromSignUp)
-        {
-            Intent intent=new Intent(this,LoginPage.class);
-            startActivity(intent
-            );
+        } else if (view == toLoginFromSignUp) {
+            Intent intent = new Intent(this, LoginPage.class);
+            startActivity(intent);
             finish();
         }
     }
@@ -69,11 +80,10 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
-        getMenuInflater().inflate(R.menu.main_menu,menu);
+        getMenuInflater().inflate(R.menu.main_menu, menu);
 
-        for(int i=0;i<menu.size();i++)
-        {
-            MenuItem item= menu.getItem(i);
+        for (int i = 0; i < menu.size(); i++) {
+            MenuItem item = menu.getItem(i);
             item.setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS);
         }
         MenuItem item;
@@ -98,30 +108,25 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
+    public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
         if (id == R.id.action_login) {
-            Intent intent=new Intent(this,LoginPage.class);
+            Intent intent = new Intent(this, LoginPage.class);
             startActivityForResult(intent, 0);
             //Toast.makeText(this,"you selected login",Toast.LENGTH_LONG).show();
             return true;
-        }
-        else if (id == R.id.action_register) {
+        } else if (id == R.id.action_register) {
             Intent intent = new Intent(this, SignUp.class);
             startActivityForResult(intent, 0);
             return true;
-        }
-        else if (id == R.id.action_exit){
+        } else if (id == R.id.action_exit) {
             sharedPref.SetUsername("YouRGuest");
             //Toast.makeText(this,"you sure you want to logout?",Toast.LENGTH_LONG).show();
             restartapp();
             return true;
-        }
-        else if (id == R.id.action_GoHome) {
-            Intent intent = new Intent(this, MainActivity.class);
-            startActivityForResult(intent, 0);
+        } else if (id == R.id.action_GoHome) {
+            finish();
             return true;
         }
         return true;
@@ -134,6 +139,14 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
         startActivity(i);
         finish();
     }
+
+    public static boolean isEmailValid(String email) {
+        String expression = "^[\\w\\.-]+@([\\w\\-]+\\.)+[A-Z]{2,4}$";
+        Pattern pattern = Pattern.compile(expression, Pattern.CASE_INSENSITIVE);
+        Matcher matcher = pattern.matcher(email);
+        return matcher.matches();
+    }
+
     void restartapp() {
         Intent i = new Intent(getApplicationContext(), MainActivity.class);
         startActivity(i);

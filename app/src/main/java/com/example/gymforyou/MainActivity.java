@@ -75,7 +75,6 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         super.onCreateOptionsMenu(menu);
         getMenuInflater().inflate(R.menu.main_menu, menu);
 
-
         for (int i = 0; i < menu.size(); i++) {
             MenuItem item = menu.getItem(i);
             item.setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS);

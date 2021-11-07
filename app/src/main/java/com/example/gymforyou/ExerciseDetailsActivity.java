@@ -93,8 +93,7 @@ public class ExerciseDetailsActivity extends AppCompatActivity implements View.O
             return true;
         }
         else if (id == R.id.action_GoHome) {
-            Intent intent = new Intent(this, MainActivity.class);
-            startActivityForResult(intent, 0);
+            finish();
             return true;
         }
         return true;

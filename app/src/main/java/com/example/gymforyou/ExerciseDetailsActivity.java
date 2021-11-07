@@ -3,6 +3,8 @@ package com.example.gymforyou;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -16,6 +18,7 @@ public class ExerciseDetailsActivity extends AppCompatActivity implements View.O
 
     SharedPref sharedPref;
     TextView tv;
+    AlertDialog.Builder builder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +28,8 @@ public class ExerciseDetailsActivity extends AppCompatActivity implements View.O
 
         tv = findViewById(R.id.tv);
         tv.setText(getIntent().getStringExtra("WE"));
+
+        builder = new AlertDialog.Builder(this);
     }
 
     @Override
@@ -87,10 +92,28 @@ public class ExerciseDetailsActivity extends AppCompatActivity implements View.O
         return true;
         }
         else if (id == R.id.action_exit){
-            sharedPref.SetUsername("YouRGuest");
-            //Toast.makeText(this,"you sure you want to logout?",Toast.LENGTH_LONG).show();
-            restartapp();
-            return true;
+            builder.setMessage("Do you want to logout?")
+                    .setCancelable(false)
+                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            finish();
+                            sharedPref.SetUsername("YouRGuest");
+                            Toast.makeText(getApplicationContext(), "You logged out",
+                                    Toast.LENGTH_SHORT).show();
+                            restartapp();
+                        }
+                    })
+                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            //  Action for 'NO' Button
+                            dialog.cancel();
+                            Toast.makeText(getApplicationContext(), "You canceled the logout",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    });
+            AlertDialog alert = builder.create();
+            alert.setTitle("Logout");
+            alert.show();
         }
         else if (id == R.id.action_GoHome) {
             finish();

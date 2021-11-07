@@ -3,6 +3,8 @@ package com.example.gymforyou;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -20,6 +22,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     MyListAdapter adapter1;
     ArrayList<String> aTitle = new ArrayList<>(), aDescription = new ArrayList<>();
     SharedPref sharedPref;
+    AlertDialog.Builder builder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,9 +46,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         l1 = findViewById(R.id.LTest);
         l1.setAdapter(adapter1);
 
+        builder = new AlertDialog.Builder(this);
+
         l1.setOnItemClickListener(this);
-
-
     }
 
     @Override
@@ -125,13 +128,29 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             startActivityForResult(intent, 0);
             return true;
         } else if (id == R.id.action_exit) {
-            sharedPref.SetUsername("YouRGuest");
-            //Toast.makeText(this,"you sure you want to logout?",Toast.LENGTH_LONG).show();
-            restartapp();
-            return true;
+            builder.setMessage("Do you want to logout?")
+                    .setCancelable(false)
+                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            finish();
+                            sharedPref.SetUsername("YouRGuest");
+                            Toast.makeText(getApplicationContext(), "You logged out",
+                                    Toast.LENGTH_SHORT).show();
+                            restartapp();
+                        }
+                    })
+                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            //  Action for 'NO' Button
+                            dialog.cancel();
+                            Toast.makeText(getApplicationContext(), "You canceled the logout",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    });
+            AlertDialog alert = builder.create();
+            alert.setTitle("Logout");
+            alert.show();
         }
-
-
         return true;
     }
 

@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -97,6 +98,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             item.setEnabled(false);
             item.setVisible(false);
 
+            item = menu.getItem(5);
+            item.setEnabled(false);
+            item.setVisible(false);
 
         } else {
 
@@ -150,6 +154,24 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
             AlertDialog alert = builder.create();
             alert.setTitle("Logout");
             alert.show();
+        } else if (id == R.id.action_SearchGyms) {
+            // Search for gyms nearby
+            Uri gmmIntentUri = Uri.parse("geo:0,0?q=gym");
+
+            // Create an Intent from gmmIntentUri. Set the action to ACTION_VIEW
+            Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+
+            // Make the Intent explicit by setting the Google Maps package
+            mapIntent.setPackage("com.google.android.apps.maps");
+
+            // Attempt to start an activity that can handle the Intent
+            startActivity(mapIntent);
+
+            mapIntent.setPackage("com.google.android.apps.maps");
+            if (mapIntent.resolveActivity(getPackageManager()) != null) {
+                startActivity(mapIntent);
+            }
+            return true;
         }
         return true;
     }

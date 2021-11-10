@@ -88,6 +88,10 @@ public class LoginPage extends AppCompatActivity implements View.OnClickListener
         item.setEnabled(false);
         item.setVisible(false);
 
+        item = menu.getItem(5);
+        item.setEnabled(false);
+        item.setVisible(false);
+
         return true;
     }
 

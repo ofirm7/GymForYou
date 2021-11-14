@@ -19,7 +19,7 @@ import java.util.regex.Pattern;
 public class SignUp extends AppCompatActivity implements View.OnClickListener {
 
     Button submit, toLoginFromSignUp;
-    EditText email, username, pass, passConfirmation;
+    EditText email, username, pass, passConfirmation, phoneNumber;
     SharedPref sharedPref;
 
     @Override
@@ -27,6 +27,7 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
 
+        phoneNumber = findViewById(R.id.phoneNumberSignUp);
         toLoginFromSignUp = findViewById(R.id.toLoginFromSignUp);
         sharedPref = new SharedPref(this);
         submit = findViewById(R.id.submitSignUp);
@@ -49,10 +50,18 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
             } else if (!isEmailValid(email.getText().toString())) {
                 Toast.makeText(this, "email is not valid", Toast.LENGTH_SHORT).show();
                 return;
+            } else if (phoneNumber.getText().toString().length() != 10) {
+                Toast.makeText(this, "phone number is not valid", Toast.LENGTH_SHORT).show();
+                return;
+            } else if (pass.getText().toString().length() < 6 || pass.getText().toString().length() > 18 ||
+                        pass.getText().toString().contains(" ")) {
+                Toast.makeText(this, "passwords cannot contain space", Toast.LENGTH_SHORT).show();
+                return;
             } else {
 
                 boolean flagU = false;
                 boolean flagE = false;
+                boolean flagP = false;
                 int tempU = 0;
                 for (int i = 0; i < DataModel.users.size() && !flagU && !flagE; i++) {
                     if (DataModel.users.get(i).getUsername().equals(username.getText().toString())) {
@@ -62,6 +71,8 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
                     if (DataModel.users.get(i).getEmail().equals(email.getText().toString())) {
                         flagE = true;
                     }
+                    if (DataModel.users.get(i).getPhoneNumber().equals(phoneNumber.getText().toString()))
+                        flagP = true;
                 }
                 if (flagU && flagE) {
                     Toast.makeText(this, "username and email are taken", Toast.LENGTH_SHORT).show();
@@ -72,10 +83,14 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
                 } else if (flagE) {
                     Toast.makeText(this, "email already used", Toast.LENGTH_SHORT).show();
                     return;
+                } else if (flagP) {
+                    Toast.makeText(this, "phone number already in use", Toast.LENGTH_SHORT).show();
+                    return;
                 }
 
                 //DataModel.users.add(new User(username.toString(), pass.toString()));
-                DataModel.users.add(new User(username.getText().toString(), pass.getText().toString(), pass.getText().toString()));
+                DataModel.users.add(new User(username.getText().toString(), pass.getText().toString(), pass.getText().toString(),
+                        phoneNumber.getText().toString()));
                 DataModel.userSave();
                 sharedPref.SetUsername(username.getText().toString());
                 finish();

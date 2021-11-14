@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
 
     <item
@@ -7,7 +8,6 @@
         android:title="YouRGuest"
         android:orderInCategory="100"
         />
-
     <item
         android:id="@+id/action_login"
         android:title="Login"
@@ -31,8 +31,6 @@
         android:id="@+id/action_SearchGyms"
         android:title="Gyms"
         android:orderInCategory="600"
+        app:showAsAction="never"
         />
-
-
-
 </menu>

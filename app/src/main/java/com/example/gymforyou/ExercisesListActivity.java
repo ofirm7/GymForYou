@@ -32,15 +32,17 @@ public class ExercisesListActivity extends AppCompatActivity implements AdapterV
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_exercises_list);
 
-        aTitle.add("Excersie 1");
-        aTitle.add("Excersie 2");
+        aTitle.add("Chest");
+        aTitle.add("back");
         aTitle.add("Excersie 3");
         aTitle.add("Excersie 4");
+        aTitle.add("add");
 
-        aDescription.add("blablabla");
-        aDescription.add("blablabla");
-        aDescription.add("blablabla");
-        aDescription.add("blablabla");
+        aDescription.add("");
+        aDescription.add("");
+        aDescription.add("");
+        aDescription.add("");
+        aDescription.add("");
 
         adapter1 = new MyListAdapter(this, aTitle, aDescription);
 
@@ -55,13 +57,14 @@ public class ExercisesListActivity extends AppCompatActivity implements AdapterV
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
+        boolean startActivityBool = true;
         Intent intent1 = new Intent(this, ExerciseDetailsActivity.class);
         switch (position) {
             case 0:
-                intent1.putExtra("WE", "Exercise 1");
+                intent1.putExtra("WE", "Chest");
                 break;
             case 1:
-                intent1.putExtra("WE", "Exercise 2");
+                intent1.putExtra("WE", "Back");
                 break;
             case 2:
                 intent1.putExtra("WE", "Exercise 3");
@@ -69,19 +72,48 @@ public class ExercisesListActivity extends AppCompatActivity implements AdapterV
             case 3:
                 intent1.putExtra("WE", "Exercise 4");
                 break;
+            case 4://not working
+                startActivityBool = false;
+                if (sharedPref.GetUsername().equals("YouRGuest")) {
+                    builder.setMessage("This page is only for users")
+                            .setCancelable(false)
+                            .setPositiveButton("Login", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    Intent intent = new Intent(ExercisesListActivity.this, LoginPage.class);
+                                    startActivity(intent);
+                                }
+                            })
+                            .setNegativeButton("back", new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    //  Action for 'NO' Button
+                                    dialog.cancel();
+                                }
+                            });
+                    AlertDialog alert = builder.create();
+                    alert.setTitle("Add exercise");
+                    alert.show();
+                } else {
+                    aTitle.add("your exercise");
+
+                    aDescription.add("by you");
+                }
+                break;
         }
 
-        startActivity(intent1);
-        finish();
+        if (startActivityBool) {
+            startActivity(intent1);
+            finish();
+        }
+
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
-        getMenuInflater().inflate(R.menu.main_menu,menu);
+        getMenuInflater().inflate(R.menu.main_menu, menu);
 
-        for(int i=0;i<menu.size();i++)
-        {
-            MenuItem item= menu.getItem(i);
+        for (int i = 0; i < menu.size(); i++) {
+            MenuItem item = menu.getItem(i);
             item.setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS);
         }
         MenuItem item;
@@ -112,22 +144,19 @@ public class ExercisesListActivity extends AppCompatActivity implements AdapterV
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
+    public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
         if (id == R.id.action_login) {
-            Intent intent=new Intent(this,LoginPage.class);
+            Intent intent = new Intent(this, LoginPage.class);
             startActivityForResult(intent, 0);
             //Toast.makeText(this,"you selected login",Toast.LENGTH_LONG).show();
             return true;
-        }
-        else if (id == R.id.action_register) {
+        } else if (id == R.id.action_register) {
             Intent intent = new Intent(this, SignUp.class);
             startActivityForResult(intent, 0);
             return true;
-        }
-        else if (id == R.id.action_exit){
+        } else if (id == R.id.action_exit) {
             builder.setMessage("Do you want to logout?")
                     .setCancelable(false)
                     .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
@@ -150,8 +179,7 @@ public class ExercisesListActivity extends AppCompatActivity implements AdapterV
             AlertDialog alert = builder.create();
             alert.setTitle("Logout");
             alert.show();
-        }
-        else if (id == R.id.action_GoHome) {
+        } else if (id == R.id.action_GoHome) {
             finish();
             return true;
         }
@@ -165,6 +193,7 @@ public class ExercisesListActivity extends AppCompatActivity implements AdapterV
         startActivity(i);
         finish();
     }
+
     void restartapp() {
         Intent i = new Intent(getApplicationContext(), MainActivity.class);
         startActivity(i);

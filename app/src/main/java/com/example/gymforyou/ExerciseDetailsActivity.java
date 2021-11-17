@@ -11,15 +11,22 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class ExerciseDetailsActivity extends AppCompatActivity implements View.OnClickListener {
+import java.util.ArrayList;
+
+public class ExerciseDetailsActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemClickListener {
 
     SharedPref sharedPref;
     TextView tv;
     AlertDialog.Builder builder;
+    ListView l2;
+    MyListAdapter adapter2;
+    ArrayList<String> aTitle = new ArrayList<>(), aDescription = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,15 +34,56 @@ public class ExerciseDetailsActivity extends AppCompatActivity implements View.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_exercise_details);
 
+        aTitle.add("Excersie 1");
+        aTitle.add("Excersie 2");
+        aTitle.add("Excersie 3");
+        aTitle.add("Excersie 4");
+
+        aDescription.add("blablabla");
+        aDescription.add("blablabla");
+        aDescription.add("blablabla");
+        aDescription.add("blablabla");
+
         tv = findViewById(R.id.tv);
         tv.setText(getIntent().getStringExtra("WE"));
 
         builder = new AlertDialog.Builder(this);
+
+        adapter2 = new MyListAdapter(this, aTitle, aDescription);
+
+        l2 = findViewById(R.id.ExercisesList);
+        l2.setAdapter(adapter2);
+
+        l2.setOnItemClickListener(this);
     }
 
     @Override
     public void onClick(View view) {
 
+    }
+
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+        Intent intent1 = new Intent(this, ExerciseDetailsActivity.class);
+        switch (position) {
+            case 0:
+                intent1.putExtra("WE", "123");
+                break;
+            case 1:
+                intent1.putExtra("WE", "Exercise 2");
+                break;
+            case 2:
+                intent1.putExtra("WE", "Exercise 3");
+                break;
+            case 3:
+                intent1.putExtra("WE", "Exercise 4");
+                break;
+        }
+
+        startActivity(intent1);
+        finish();
     }
 
     @Override
@@ -135,6 +183,4 @@ public class ExerciseDetailsActivity extends AppCompatActivity implements View.O
         startActivity(i);
         finish();
     }
-
-
 }

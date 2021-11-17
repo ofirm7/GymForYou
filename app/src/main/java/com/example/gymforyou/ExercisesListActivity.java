@@ -95,10 +95,6 @@ public class ExercisesListActivity extends AppCompatActivity implements AdapterV
             item.setEnabled(false);
             item.setVisible(false);
 
-            item = menu.getItem(5);
-            item.setEnabled(false);
-            item.setVisible(false);
-
         } else {
 
             item = menu.getItem(1);
@@ -157,24 +153,6 @@ public class ExercisesListActivity extends AppCompatActivity implements AdapterV
         }
         else if (id == R.id.action_GoHome) {
             finish();
-            return true;
-        } else if (id == R.id.action_SearchGyms) {
-            // Search for gyms nearby
-            Uri gmmIntentUri = Uri.parse("geo:0,0?q=gym");
-
-            // Create an Intent from gmmIntentUri. Set the action to ACTION_VIEW
-            Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
-
-            // Make the Intent explicit by setting the Google Maps package
-            mapIntent.setPackage("com.google.android.apps.maps");
-
-            // Attempt to start an activity that can handle the Intent
-            startActivity(mapIntent);
-
-            mapIntent.setPackage("com.google.android.apps.maps");
-            if (mapIntent.resolveActivity(getPackageManager()) != null) {
-                startActivity(mapIntent);
-            }
             return true;
         }
         return true;

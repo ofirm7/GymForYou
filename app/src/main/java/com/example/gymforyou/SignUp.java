@@ -54,7 +54,7 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
                 Toast.makeText(this, "phone number is not valid", Toast.LENGTH_SHORT).show();
                 return;
             } else if (pass.getText().toString().length() < 6 || pass.getText().toString().length() > 18 ||
-                        pass.getText().toString().contains(" ")) {
+                    pass.getText().toString().contains(" ")) {
                 Toast.makeText(this, "passwords cannot contain space", Toast.LENGTH_SHORT).show();
                 return;
             } else {
@@ -126,10 +126,6 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
         item.setVisible(false);
 
         item = menu.getItem(3);
-        item.setEnabled(false);
-        item.setVisible(false);
-
-        item = menu.getItem(5);
         item.setEnabled(false);
         item.setVisible(false);
 

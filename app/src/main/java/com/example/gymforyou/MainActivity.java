@@ -18,9 +18,9 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements  View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    Button toExercises;
+    Button toExercises, toGyms;
     SharedPref sharedPref;
     AlertDialog.Builder builder;
 
@@ -31,22 +31,39 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
-
+        toGyms = findViewById(R.id.toGyms);
         toExercises = findViewById(R.id.toExercises);
 
         builder = new AlertDialog.Builder(this);
 
+        toGyms.setOnClickListener(this);
         toExercises.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View view) {
-        if(view == toExercises)
-        {
+        if (view == toExercises) {
             Intent intent1 = new Intent(this, ExercisesListActivity.class);
             startActivity(intent1);
+        } else if(view == toGyms){
+            // Search for gyms nearby
+            Uri gmmIntentUri = Uri.parse("geo:0,0?q=gym");
+
+            // Create an Intent from gmmIntentUri. Set the action to ACTION_VIEW
+            Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+
+            // Make the Intent explicit by setting the Google Maps package
+            mapIntent.setPackage("com.google.android.apps.maps");
+
+            // Attempt to start an activity that can handle the Intent
+            startActivity(mapIntent);
+
+            mapIntent.setPackage("com.google.android.apps.maps");
+            if (mapIntent.resolveActivity(getPackageManager()) != null) {
+                startActivity(mapIntent);
+            }
         }
+
     }
 
 
@@ -71,10 +88,6 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
             item.setVisible(false);
 
             item = menu.getItem(3);
-            item.setEnabled(false);
-            item.setVisible(false);
-
-            item = menu.getItem(5);
             item.setEnabled(false);
             item.setVisible(false);
 
@@ -130,24 +143,6 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
             AlertDialog alert = builder.create();
             alert.setTitle("Logout");
             alert.show();
-        } else if (id == R.id.action_SearchGyms) {
-            // Search for gyms nearby
-            Uri gmmIntentUri = Uri.parse("geo:0,0?q=gym");
-
-            // Create an Intent from gmmIntentUri. Set the action to ACTION_VIEW
-            Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
-
-            // Make the Intent explicit by setting the Google Maps package
-            mapIntent.setPackage("com.google.android.apps.maps");
-
-            // Attempt to start an activity that can handle the Intent
-            startActivity(mapIntent);
-
-            mapIntent.setPackage("com.google.android.apps.maps");
-            if (mapIntent.resolveActivity(getPackageManager()) != null) {
-                startActivity(mapIntent);
-            }
-            return true;
         }
         return true;
     }

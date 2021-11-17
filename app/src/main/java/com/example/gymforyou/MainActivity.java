@@ -46,21 +46,43 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Intent intent1 = new Intent(this, ExercisesListActivity.class);
             startActivity(intent1);
         } else if(view == toGyms){
-            // Search for gyms nearby
-            Uri gmmIntentUri = Uri.parse("geo:0,0?q=gym");
+            if (sharedPref.GetUsername().equals("YouRGuest"))
+            {
+                builder.setMessage("This page is only for users")
+                        .setCancelable(false)
+                        .setPositiveButton("Login", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                Intent intent = new Intent(MainActivity.this,LoginPage.class);
+                                startActivity(intent);
+                            }
+                        })
+                        .setNegativeButton("back", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                //  Action for 'NO' Button
+                                dialog.cancel();
+                            }
+                        });
+                AlertDialog alert = builder.create();
+                alert.setTitle("Gyms");
+                alert.show();
+            }
+            else {
+                // Search for gyms nearby
+                Uri gmmIntentUri = Uri.parse("geo:0,0?q=gym");
 
-            // Create an Intent from gmmIntentUri. Set the action to ACTION_VIEW
-            Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                // Create an Intent from gmmIntentUri. Set the action to ACTION_VIEW
+                Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
 
-            // Make the Intent explicit by setting the Google Maps package
-            mapIntent.setPackage("com.google.android.apps.maps");
+                // Make the Intent explicit by setting the Google Maps package
+                mapIntent.setPackage("com.google.android.apps.maps");
 
-            // Attempt to start an activity that can handle the Intent
-            startActivity(mapIntent);
-
-            mapIntent.setPackage("com.google.android.apps.maps");
-            if (mapIntent.resolveActivity(getPackageManager()) != null) {
+                // Attempt to start an activity that can handle the Intent
                 startActivity(mapIntent);
+
+                mapIntent.setPackage("com.google.android.apps.maps");
+                if (mapIntent.resolveActivity(getPackageManager()) != null) {
+                    startActivity(mapIntent);
+                }
             }
         }
 

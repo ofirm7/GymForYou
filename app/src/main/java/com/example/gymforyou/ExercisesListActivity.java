@@ -4,26 +4,31 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 
-public class ExercisesListActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
+public class ExercisesListActivity extends AppCompatActivity implements AdapterView.OnItemClickListener, View.OnClickListener {
 
     ListView l1;
     MyListAdapter adapter1;
     ArrayList<String> aTitle = new ArrayList<>(), aDescription = new ArrayList<>();
     SharedPref sharedPref;
     AlertDialog.Builder builder;
+    Button openAddDialog, addMuscle;
+    EditText nameOfMuscle;
+    Dialog addDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,26 +37,69 @@ public class ExercisesListActivity extends AppCompatActivity implements AdapterV
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_exercises_list);
 
-        aTitle.add("Chest");
-        aTitle.add("back");
-        aTitle.add("Excersie 3");
-        aTitle.add("Excersie 4");
-        aTitle.add("add");
-
-        aDescription.add("");
-        aDescription.add("");
-        aDescription.add("");
-        aDescription.add("");
-        aDescription.add("");
+        for (int i = 0; i < DataModel.muscles.size(); i++) {
+            aTitle.add(DataModel.muscles.get(i).getName());
+            aDescription.add(DataModel.muscles.get(i).getCreator());
+        }
 
         adapter1 = new MyListAdapter(this, aTitle, aDescription);
 
         l1 = findViewById(R.id.LTest);
         l1.setAdapter(adapter1);
 
+        openAddDialog = findViewById(R.id.openAddDialog);
+
         builder = new AlertDialog.Builder(this);
 
+        openAddDialog.setOnClickListener(this);
         l1.setOnItemClickListener(this);
+    }
+
+
+    @Override
+    public void onClick(View view) {
+        if (view == openAddDialog) {
+            if (sharedPref.GetUsername().equals("YouRGuest")) {
+                builder.setMessage("This option is only for users")
+                        .setCancelable(false)
+                        .setPositiveButton("Login", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                Intent intent = new Intent(ExercisesListActivity.this, LoginPage.class);
+                                startActivityForResult(intent, 0);
+                            }
+                        })
+                        .setNegativeButton("back", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                //  Action for 'NO' Button
+                                dialog.cancel();
+                            }
+                        });
+                AlertDialog alert = builder.create();
+                alert.setTitle("Add Muscle");
+                alert.show();
+            } else {
+                OpenAddMuscleDialog();
+            }
+        } else if (view == addMuscle) {
+
+            DataModel.muscles.add(new Muscle(nameOfMuscle.getText().toString(), sharedPref.GetUsername(), ""));
+            DataModel.muscleSave();
+            addDialog.dismiss();
+        }
+    }
+
+    public void OpenAddMuscleDialog() {
+        addDialog = new Dialog(this);
+        addDialog.setContentView(R.layout.custom_dialog_add_muscle);
+        addDialog.setTitle("Add Muscle");
+
+        nameOfMuscle = findViewById(R.id.nameOfMuscle);
+        addMuscle = findViewById(R.id.addMuscle);
+
+
+        addMuscle.setOnClickListener(this);
+
+        addDialog.show();
     }
 
     @Override
@@ -72,33 +120,8 @@ public class ExercisesListActivity extends AppCompatActivity implements AdapterV
             case 3:
                 intent1.putExtra("WE", "Exercise 4");
                 break;
-            case 4://not working
-                startActivityBool = false;
-                if (sharedPref.GetUsername().equals("YouRGuest")) {
-                    builder.setMessage("This page is only for users")
-                            .setCancelable(false)
-                            .setPositiveButton("Login", new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {
-                                    Intent intent = new Intent(ExercisesListActivity.this, LoginPage.class);
-                                    startActivity(intent);
-                                }
-                            })
-                            .setNegativeButton("back", new DialogInterface.OnClickListener() {
-                                public void onClick(DialogInterface dialog, int id) {
-                                    //  Action for 'NO' Button
-                                    dialog.cancel();
-                                }
-                            });
-                    AlertDialog alert = builder.create();
-                    alert.setTitle("Add exercise");
-                    alert.show();
-                } else {
-                    aTitle.add("your exercise");
-
-                    aDescription.add("by you");
-                }
-                break;
         }
+
 
         if (startActivityBool) {
             startActivity(intent1);

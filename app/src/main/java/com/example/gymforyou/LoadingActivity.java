@@ -1,8 +1,8 @@
 package com.example.gymforyou;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.Person;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -19,7 +19,8 @@ import java.util.ArrayList;
 public class LoadingActivity extends AppCompatActivity {
 
     FirebaseDatabase database;
-    DatabaseReference dbRef;
+    DatabaseReference dbUserRef;
+    DatabaseReference dbMuscleRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,9 +28,24 @@ public class LoadingActivity extends AppCompatActivity {
         setContentView(R.layout.activity_loading);
 
         database = FirebaseDatabase.getInstance();
-        dbRef = database.getReference("user");
+        dbUserRef = database.getReference("user");
+        dbMuscleRef = database.getReference("muscles");
 
-        dbRef.addValueEventListener(new ValueEventListener() {
+        dbMuscleRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                GenericTypeIndicator<ArrayList<Muscle>> t = new GenericTypeIndicator<ArrayList<Muscle>>() {};
+                ArrayList<Muscle> fbMuscle = dataSnapshot.getValue(t);
+                DataModel.muscles.clear();
+                DataModel.muscles.addAll(fbMuscle);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+        dbUserRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // This method is called once with the initial value and again

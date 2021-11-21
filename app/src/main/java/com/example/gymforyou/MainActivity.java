@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         .setPositiveButton("Login", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 Intent intent = new Intent(MainActivity.this,LoginPage.class);
-                                startActivity(intent);
+                                startActivityForResult(intent, 0);
                             }
                         })
                         .setNegativeButton("back", new DialogInterface.OnClickListener() {

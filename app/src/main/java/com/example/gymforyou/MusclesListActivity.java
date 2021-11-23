@@ -4,51 +4,67 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.Toast;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+import java.util.ArrayList;
 
-    Button toExercises, toGyms;
+public class MusclesListActivity extends AppCompatActivity implements AdapterView.OnItemClickListener, View.OnClickListener {
+
+    ListView l1;
+    MyListAdapter adapter1;
+    ArrayList<String> aTitle = new ArrayList<>(), aDescription = new ArrayList<>();
     SharedPref sharedPref;
     AlertDialog.Builder builder;
+    Button openAddDialog, addMuscle;
+    EditText nameOfMuscle;
+    Dialog addDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         sharedPref = new SharedPref(this);
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
-        toGyms = findViewById(R.id.toGyms);
-        toExercises = findViewById(R.id.toExercises);
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_muscles_list);
+
+        for (int i = 0; i < DataModel.muscles.size(); i++) {
+            aTitle.add(DataModel.muscles.get(i).getName());
+            aDescription.add(DataModel.muscles.get(i).getCreator());
+        }
+
+        adapter1 = new MyListAdapter(this, aTitle, aDescription);
+
+        l1 = findViewById(R.id.LTest);
+        l1.setAdapter(adapter1);
+
+        openAddDialog = findViewById(R.id.openAddDialog);
 
         builder = new AlertDialog.Builder(this);
 
-        toGyms.setOnClickListener(this);
-        toExercises.setOnClickListener(this);
+        openAddDialog.setOnClickListener(this);
+        l1.setOnItemClickListener(this);
     }
+
 
     @Override
     public void onClick(View view) {
-        if (view == toExercises) {
-            Intent intent1 = new Intent(this, MusclesListActivity.class);
-            startActivity(intent1);
-        } else if(view == toGyms){
-            if (sharedPref.GetUsername().equals("YouRGuest"))
-            {
-                builder.setMessage("This page is only for users")
+        if (view == openAddDialog) {
+            if (sharedPref.GetUsername().equals("YouRGuest")) {
+                builder.setMessage("This option is only for users")
                         .setCancelable(false)
                         .setPositiveButton("Login", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-                                Intent intent = new Intent(MainActivity.this,LoginPage.class);
+                                Intent intent = new Intent(MusclesListActivity.this, LoginPage.class);
                                 startActivityForResult(intent, 0);
                             }
                         })
@@ -59,31 +75,51 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                             }
                         });
                 AlertDialog alert = builder.create();
-                alert.setTitle("Gyms");
+                alert.setTitle("Add Muscle");
                 alert.show();
-            }
-            else {
-                // Search for gyms nearby
-                Uri gmmIntentUri = Uri.parse("geo:0,0?q=gym");
-
-                // Create an Intent from gmmIntentUri. Set the action to ACTION_VIEW
-                Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
-
-                // Make the Intent explicit by setting the Google Maps package
-                mapIntent.setPackage("com.google.android.apps.maps");
-
-                // Attempt to start an activity that can handle the Intent
-                startActivity(mapIntent);
-
-                mapIntent.setPackage("com.google.android.apps.maps");
-                if (mapIntent.resolveActivity(getPackageManager()) != null) {
-                    startActivity(mapIntent);
-                }
+            } else {
+                OpenAddMuscleDialog();
             }
         }
-
     }
 
+    public void OpenAddMuscleDialog() {
+        addDialog = new Dialog(this);
+        addDialog.setContentView(R.layout.custom_dialog_add_muscle);
+        addDialog.setTitle("Add Muscle");
+
+        addDialog.setCancelable(true);
+
+        nameOfMuscle = addDialog.findViewById(R.id.nameOfMuscle);
+        addMuscle = addDialog.findViewById(R.id.addMuscle);
+
+
+        addMuscle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(v == addMuscle)
+                {
+                    DataModel.muscles.add(new Muscle(nameOfMuscle.getText().toString(), sharedPref.GetUsername(), ""));
+                    DataModel.muscleSave();
+                    addDialog.dismiss();
+                    restartapp();
+                }
+            }
+        });
+
+        addDialog.show();
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+        boolean startActivityBool = true;
+        Intent intent1 = new Intent(this, ExercisesListActivity.class);
+        intent1.putExtra("WE", position);
+        startActivity(intent1);
+        finish();
+
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -94,11 +130,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             MenuItem item = menu.getItem(i);
             item.setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS);
         }
-
         MenuItem item;
-        item = menu.getItem(4);
-        item.setEnabled(false);
-        item.setVisible(false);
 
         if (sharedPref.GetUsername().equals("YouRGuest")) {
             item = menu.getItem(0);
@@ -161,6 +193,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             AlertDialog alert = builder.create();
             alert.setTitle("Logout");
             alert.show();
+        } else if (id == R.id.action_GoHome) {
+            finish();
+            return true;
         }
         return true;
     }
@@ -174,8 +209,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     void restartapp() {
-        Intent i = new Intent(getApplicationContext(), MainActivity.class);
+        Intent i = new Intent(getApplicationContext(), MusclesListActivity.class);
         startActivity(i);
-        finish();
+       // finish();
     }
 }

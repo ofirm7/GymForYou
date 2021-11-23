@@ -7,19 +7,28 @@
     android:orientation="vertical"
     tools:context=".ExercisesListActivity">
 
+    <TextView
+        android:layout_marginTop="10dp"
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/nameOfMuscleTv"
+        android:textSize="30dp"
+        />
+
+    <TextView
+        android:layout_gravity="center"
+        android:id="@+id/creatorTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="15dp"
+        android:layout_marginTop="5dp"
+        />
+
     <ListView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/LTest"
-        />
-
-    <Button
-        android:id="@+id/openAddDialog"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Add"
-        android:layout_gravity="center"
-        android:gravity="center"
+        android:id="@+id/ExercisesList"
         />
 
 </LinearLayout>

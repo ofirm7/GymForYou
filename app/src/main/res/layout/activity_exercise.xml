@@ -5,29 +5,24 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ExerciseDetailsActivity">
+    tools:context=".ExerciseActivity">
 
     <TextView
         android:layout_marginTop="10dp"
         android:layout_gravity="center"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/nameOfMuscleTv"
+        android:id="@+id/nameOfExerciseTv"
         android:textSize="30dp"
         />
+
     <TextView
         android:layout_gravity="center"
-        android:id="@+id/creatorTv"
+        android:id="@+id/exerciseCreatorTv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textSize="20dp"
+        android:textSize="15dp"
         android:layout_marginTop="5dp"
-        />
-
-    <ListView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/ExercisesList"
         />
 
 </LinearLayout>

@@ -1,11 +1,21 @@
 package com.example.gymforyou;
 
+import java.util.ArrayList;
+
 public class Muscle {
     private String name;
     private String creator;
     private String description;
+    private ArrayList<Exercise>exercisesList;
 
     public Muscle() {
+    }
+
+    public Muscle(String name, String creator, String description, ArrayList<Exercise> exercisesList) {
+        this.name = name;
+        this.creator = creator;
+        this.description = description;
+        this.exercisesList = exercisesList;
     }
 
     public Muscle(String name, String creator, String description) {

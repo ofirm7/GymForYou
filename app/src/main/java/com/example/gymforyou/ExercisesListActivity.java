@@ -80,11 +80,6 @@ public class ExercisesListActivity extends AppCompatActivity implements AdapterV
             } else {
                 OpenAddMuscleDialog();
             }
-        } else if (view == addMuscle) {
-
-            DataModel.muscles.add(new Muscle(nameOfMuscle.getText().toString(), sharedPref.GetUsername(), ""));
-            DataModel.muscleSave();
-            addDialog.dismiss();
         }
     }
 
@@ -93,11 +88,23 @@ public class ExercisesListActivity extends AppCompatActivity implements AdapterV
         addDialog.setContentView(R.layout.custom_dialog_add_muscle);
         addDialog.setTitle("Add Muscle");
 
-        nameOfMuscle = findViewById(R.id.nameOfMuscle);
-        addMuscle = findViewById(R.id.addMuscle);
+        addDialog.setCancelable(true);
+
+        nameOfMuscle = addDialog.findViewById(R.id.nameOfMuscle);
+        addMuscle = addDialog.findViewById(R.id.addMuscle);
 
 
-        addMuscle.setOnClickListener(this);
+        addMuscle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(v == addMuscle)
+                {
+                    DataModel.muscles.add(new Muscle(nameOfMuscle.getText().toString(), sharedPref.GetUsername(), ""));
+                    DataModel.muscleSave();
+                    addDialog.dismiss();
+                }
+            }
+        });
 
         addDialog.show();
     }
@@ -107,26 +114,9 @@ public class ExercisesListActivity extends AppCompatActivity implements AdapterV
 
         boolean startActivityBool = true;
         Intent intent1 = new Intent(this, ExerciseDetailsActivity.class);
-        switch (position) {
-            case 0:
-                intent1.putExtra("WE", "Chest");
-                break;
-            case 1:
-                intent1.putExtra("WE", "Back");
-                break;
-            case 2:
-                intent1.putExtra("WE", "Exercise 3");
-                break;
-            case 3:
-                intent1.putExtra("WE", "Exercise 4");
-                break;
-        }
-
-
-        if (startActivityBool) {
-            startActivity(intent1);
-            finish();
-        }
+        intent1.putExtra("WE", position);
+        startActivity(intent1);
+        finish();
 
     }
 

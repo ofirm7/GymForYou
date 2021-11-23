@@ -12,8 +12,16 @@
         android:layout_gravity="center"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/tv"
+        android:id="@+id/nameOfMuscleTv"
+        android:textSize="30dp"
+        />
+    <TextView
+        android:layout_gravity="center"
+        android:id="@+id/creatorTv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:textSize="20dp"
+        android:layout_marginTop="5dp"
         />
 
     <ListView

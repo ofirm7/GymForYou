@@ -6,13 +6,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,7 +20,7 @@ import java.util.ArrayList;
 public class ExerciseDetailsActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemClickListener {
 
     SharedPref sharedPref;
-    TextView tv;
+    TextView nameOfMuscleTv, creatorTv;
     AlertDialog.Builder builder;
     ListView l2;
     MyListAdapter adapter2;
@@ -34,18 +32,11 @@ public class ExerciseDetailsActivity extends AppCompatActivity implements View.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_exercise_details);
 
-        aTitle.add("Excersie 1");
-        aTitle.add("Excersie 2");
-        aTitle.add("Excersie 3");
-        aTitle.add("Excersie 4");
+        nameOfMuscleTv = findViewById(R.id.nameOfMuscleTv);
+        nameOfMuscleTv.setText(DataModel.muscles.get(getIntent().getIntExtra("WE", 0)).getName());
 
-        aDescription.add("blablabla");
-        aDescription.add("blablabla");
-        aDescription.add("blablabla");
-        aDescription.add("blablabla");
-
-        tv = findViewById(R.id.tv);
-        tv.setText(getIntent().getStringExtra("WE"));
+        creatorTv = findViewById(R.id.creatorTv);
+        creatorTv.setText("By " + DataModel.muscles.get(getIntent().getIntExtra("WE", 0)).getCreator());
 
         builder = new AlertDialog.Builder(this);
 

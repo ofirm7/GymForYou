@@ -27,7 +27,7 @@
 
     <Button
         android:layout_gravity="center"
-        android:id="@+id/addMuscle"
+        android:id="@+id/addExercise"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Submit"

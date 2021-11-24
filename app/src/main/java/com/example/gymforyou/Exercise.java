@@ -3,12 +3,15 @@ package com.example.gymforyou;
 public class Exercise {
     private String nameOfExercise;
     private String creator;
-    private String description;
+    private String descriptionOfExercise;
 
-    public Exercise(String name, String creator, String description) {
+    public Exercise(String name, String creator, String descriptionOfExercise) {
         this.nameOfExercise = name;
         this.creator = creator;
-        this.description = description;
+        this.descriptionOfExercise = descriptionOfExercise;
+    }
+
+    public Exercise() {
     }
 
     public String getName() {
@@ -27,12 +30,12 @@ public class Exercise {
         this.creator = creator;
     }
 
-    public String getDescription() {
-        return description;
+    public String getDescriptionOfExercise() {
+        return descriptionOfExercise;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setDescriptionOfExercise(String descriptionOfExercise) {
+        this.descriptionOfExercise = descriptionOfExercise;
     }
 
     @Override
@@ -40,7 +43,7 @@ public class Exercise {
         return "Exercise{" +
                 "name='" + nameOfExercise + '\'' +
                 ", creator='" + creator + '\'' +
-                ", description='" + description + '\'' +
+                ", description='" + descriptionOfExercise + '\'' +
                 '}';
     }
 }

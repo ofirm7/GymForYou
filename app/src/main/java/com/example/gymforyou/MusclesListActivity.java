@@ -99,7 +99,8 @@ public class MusclesListActivity extends AppCompatActivity implements AdapterVie
             public void onClick(View v) {
                 if(v == addMuscle)
                 {
-                    DataModel.muscles.add(new Muscle(nameOfMuscle.getText().toString(), sharedPref.GetUsername(), ""));
+                    DataModel.muscles.add(new Muscle(nameOfMuscle.getText().toString(), sharedPref.GetUsername(), "",
+                            new ArrayList<Exercise>()));
                     DataModel.muscleSave();
                     addDialog.dismiss();
                     restartapp();
@@ -113,7 +114,6 @@ public class MusclesListActivity extends AppCompatActivity implements AdapterVie
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-        boolean startActivityBool = true;
         Intent intent1 = new Intent(this, ExercisesListActivity.class);
         intent1.putExtra("WE", position);
         startActivity(intent1);
@@ -211,6 +211,6 @@ public class MusclesListActivity extends AppCompatActivity implements AdapterVie
     void restartapp() {
         Intent i = new Intent(getApplicationContext(), MusclesListActivity.class);
         startActivity(i);
-       // finish();
+        finish();
     }
 }

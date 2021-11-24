@@ -4,6 +4,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -11,6 +12,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,6 +28,9 @@ public class ExercisesListActivity extends AppCompatActivity implements View.OnC
     ListView l2;
     MyListAdapter adapter2;
     ArrayList<String> aTitle = new ArrayList<>(), aDescription = new ArrayList<>();
+    Dialog addDialog;
+    EditText nameOfExercise, descriptionOfExercise;
+    Button openAddDialog, addExercise;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +41,14 @@ public class ExercisesListActivity extends AppCompatActivity implements View.OnC
         nameOfMuscleTv = findViewById(R.id.nameOfMuscleTv);
         nameOfMuscleTv.setText(DataModel.muscles.get(getIntent().getIntExtra("WE", 0)).getName());
 
+        if (DataModel.muscles.get(getIntent().getIntExtra("WE", 0)).getExercisesList() != null)
+        {
+            for (int i = 0; i < DataModel.muscles.get(getIntent().getIntExtra("WE", 0)).getExercisesList().size(); i++) {
+                aTitle.add(DataModel.muscles.get(getIntent().getIntExtra("WE", 0)).getExercisesList().get(i).getName());
+                aDescription.add(DataModel.muscles.get(getIntent().getIntExtra("WE", 0)).getExercisesList().get(i).getCreator());
+            }
+        }
+
         creatorTv = findViewById(R.id.creatorTv);
         creatorTv.setText("By " + DataModel.muscles.get(getIntent().getIntExtra("WE", 0)).getCreator());
 
@@ -42,37 +56,90 @@ public class ExercisesListActivity extends AppCompatActivity implements View.OnC
 
         adapter2 = new MyListAdapter(this, aTitle, aDescription);
 
+        openAddDialog = findViewById(R.id.openAddExerciseDialog);
+
         l2 = findViewById(R.id.ExercisesList);
         l2.setAdapter(adapter2);
 
+        openAddDialog.setOnClickListener(this);
         l2.setOnItemClickListener(this);
     }
 
     @Override
     public void onClick(View view) {
 
+        if (view == openAddDialog) {
+            if (sharedPref.GetUsername().equals("YouRGuest")) {
+                builder.setMessage("This option is only for users")
+                        .setCancelable(false)
+                        .setPositiveButton("Login", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                Intent intent = new Intent(ExercisesListActivity.this, LoginPage.class);
+                                startActivityForResult(intent, 0);
+                            }
+                        })
+                        .setNegativeButton("back", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                //  Action for 'NO' Button
+                                dialog.cancel();
+                            }
+                        });
+                AlertDialog alert = builder.create();
+                alert.setTitle("Add Exercise");
+                alert.show();
+            } else {
+                OpenAddMuscleDialog();
+            }
+        }
     }
 
+    public void OpenAddMuscleDialog() {
+        addDialog = new Dialog(this);
+        addDialog.setContentView(R.layout.custom_dialog_add_exercise);
+        addDialog.setTitle("Add Exercise");
+
+        addDialog.setCancelable(true);
+
+        nameOfExercise= addDialog.findViewById(R.id.nameOfExercise);
+        descriptionOfExercise = addDialog.findViewById(R.id.descriptionOfExercise);
+        addExercise = addDialog.findViewById(R.id.addExercise);
+
+
+        addExercise.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(v == addExercise)
+                {
+                    if (DataModel.muscles.get(getIntent().getIntExtra("WE", 0)).getExercisesList() != null)
+                    {
+                        DataModel.muscles.get(getIntent().getIntExtra("WE", 0)).addExercise(
+                                new Exercise(nameOfExercise.getText().toString(),
+                                        sharedPref.GetUsername(),
+                                        descriptionOfExercise.getText().toString()));
+                    }
+                    else
+                    {
+                        ArrayList<Exercise> temp = new ArrayList<>();
+                        temp.add(new Exercise(nameOfExercise.getText().toString(),
+                                sharedPref.GetUsername(),
+                                descriptionOfExercise.getText().toString()));
+                        DataModel.muscles.get(getIntent().getIntExtra("WE", 0)).setExercisesList(temp);
+                    }
+                    DataModel.muscleSave();
+                    addDialog.dismiss();
+                    restartapp();
+                }
+            }
+        });
+
+        addDialog.show();
+    }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-        Intent intent1 = new Intent(this, ExercisesListActivity.class);
-        switch (position) {
-            case 0:
-                intent1.putExtra("WE", "123");
-                break;
-            case 1:
-                intent1.putExtra("WE", "Exercise 2");
-                break;
-            case 2:
-                intent1.putExtra("WE", "Exercise 3");
-                break;
-            case 3:
-                intent1.putExtra("WE", "Exercise 4");
-                break;
-        }
-
+        Intent intent1 = new Intent(this, ExerciseActivity.class);
+        intent1.putExtra("ELTOE", position);
         startActivity(intent1);
         finish();
     }
@@ -170,7 +237,8 @@ public class ExercisesListActivity extends AppCompatActivity implements View.OnC
         finish();
     }
     void restartapp() {
-        Intent i = new Intent(getApplicationContext(), MainActivity.class);
+        Intent i = new Intent(getApplicationContext(), ExercisesListActivity.class);
+        i.putExtra("WE", getIntent().getIntExtra("WE", 0));
         startActivity(i);
         finish();
     }

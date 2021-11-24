@@ -6,7 +6,7 @@ public class Muscle {
     private String name;
     private String creator;
     private String description;
-    private ArrayList<Exercise>exercisesList;
+    private ArrayList<Exercise> exercisesList;
 
     public Muscle() {
     }
@@ -24,21 +24,23 @@ public class Muscle {
         this.description = description;
     }
 
-    @Override
-    public String toString() {
-        return "Muscle{" +
-                "name='" + name + '\'' +
-                ", creator='" + creator + '\'' +
-                ", description='" + description + '\'' +
-                '}';
-    }
-
     public String getName() {
         return name;
     }
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public ArrayList<Exercise> getExercisesList() {
+        return exercisesList;
+    }
+
+    public void setExercisesList(ArrayList<Exercise> exercisesList) {
+        this.exercisesList = exercisesList;
+    }
+    public void addExercise(Exercise exercise) {
+        this.exercisesList.add(exercise);
     }
 
     public String getCreator() {
@@ -55,5 +57,14 @@ public class Muscle {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    @Override
+    public String toString() {
+        return "Muscle{" +
+                "name='" + name + '\'' +
+                ", creator='" + creator + '\'' +
+                ", description='" + description + '\'' +
+                '}';
     }
 }

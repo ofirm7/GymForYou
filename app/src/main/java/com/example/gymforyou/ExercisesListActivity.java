@@ -140,6 +140,7 @@ public class ExercisesListActivity extends AppCompatActivity implements View.OnC
 
         Intent intent1 = new Intent(this, ExerciseActivity.class);
         intent1.putExtra("ELTOE", position);
+        intent1.putExtra("WESEC", getIntent().getIntExtra("WE", 0));
         startActivity(intent1);
         finish();
     }

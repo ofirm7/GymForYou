@@ -55,6 +55,7 @@ public class LoginPage extends AppCompatActivity implements View.OnClickListener
                             && DataModel.users.get(temp).getEmail().equals(usernameOrEmail.getText().toString())) {
                         sharedPref.SetUsername(DataModel.users.get(temp).getUsername());
                         finish();
+
                     }
                 }
             }

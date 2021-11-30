@@ -31,15 +31,15 @@ public class ExerciseActivity extends AppCompatActivity {
         setContentView(R.layout.activity_exercise);
 
         nameOfExerciseTv = findViewById(R.id.nameOfExerciseTv);
-        nameOfExerciseTv.setText(DataModel.muscles.get(getIntent().getIntExtra("WE", 0))
+        nameOfExerciseTv.setText(DataModel.muscles.get(getIntent().getIntExtra("WESEC", 0))
                 .getExercisesList().get(getIntent().getIntExtra("ELTOE", 0)).getName());
 
         exerciseCreatorTv = findViewById(R.id.exerciseCreatorTv);
-        exerciseCreatorTv.setText(" BY " + DataModel.muscles.get(getIntent().getIntExtra("WE", 0))
+        exerciseCreatorTv.setText(" BY " + DataModel.muscles.get(getIntent().getIntExtra("WESEC", 0))
                 .getExercisesList().get(getIntent().getIntExtra("ELTOE", 0)).getCreator());
 
         exerciseDescriptionTv = findViewById(R.id.exerciseDescriptionTv);
-        exerciseDescriptionTv.setText(" " + DataModel.muscles.get(getIntent().getIntExtra("WE", 0))
+        exerciseDescriptionTv.setText(" " + DataModel.muscles.get(getIntent().getIntExtra("WESEC", 0))
                 .getExercisesList().get(getIntent().getIntExtra("ELTOE", 0)).getDescriptionOfExercise() + " ");
 
         builder = new AlertDialog.Builder(this);

@@ -116,7 +116,7 @@ public class ExercisesListActivity extends AppCompatActivity implements View.OnC
                                 new Exercise(nameOfExercise.getText().toString(),
                                         sharedPref.GetUsername(),
                                         descriptionOfExercise.getText().toString(),
-                                        null));
+                                        null, null));
                     }
                     else
                     {
@@ -124,7 +124,7 @@ public class ExercisesListActivity extends AppCompatActivity implements View.OnC
                         temp.add(new Exercise(nameOfExercise.getText().toString(),
                                 sharedPref.GetUsername(),
                                 descriptionOfExercise.getText().toString(),
-                                null));
+                                null, null));
                         DataModel.muscles.get(getIntent().getIntExtra("WE", 0)).setExercisesList(temp);
                     }
                     DataModel.muscleSave();

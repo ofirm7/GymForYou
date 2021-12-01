@@ -25,6 +25,8 @@ public class ExerciseActivity extends AppCompatActivity implements View.OnClickL
     AlertDialog.Builder builder;
     VideoView exerciseVideoExample;
     Button startVideoOrAddVideo;
+    Button addDetails;
+    Button removeDetails;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +46,9 @@ public class ExerciseActivity extends AppCompatActivity implements View.OnClickL
         exerciseDescriptionTv.setText(" " + DataModel.muscles.get(getIntent().getIntExtra("WESEC", 0))
                 .getExercisesList().get(getIntent().getIntExtra("ELTOE", 0)).getDescriptionOfExercise() + " ");
 
+        addDetails = findViewById(R.id.addDetails);
+        removeDetails = findViewById(R.id.removeDetails);
+
         //Video
         exerciseVideoExample = findViewById(R.id.exerciseVideoExample);
 
@@ -51,17 +56,14 @@ public class ExerciseActivity extends AppCompatActivity implements View.OnClickL
 
         if (exerciseVideoExample == null) {
             startVideoOrAddVideo.setText(" Add video");
-        }
-        else
-        {
+        } else {
             startVideoOrAddVideo.setText("play");
         }
 
-        MediaController mediaController= new MediaController(this);
+        MediaController mediaController = new MediaController(this);
         mediaController.setAnchorView(exerciseVideoExample);
 
-        Uri uri=Uri.parse(Environment.getExternalStorageDirectory().getPath()+"VID-20200121-WA0034[1].mp4");
-
+        Uri uri = Uri.parse(Environment.getExternalStorageDirectory().getPath() + "VID-20200121-WA0034[1].mp4");
 
         exerciseVideoExample.setMediaController(mediaController);
         exerciseVideoExample.setVideoURI(uri);
@@ -69,6 +71,20 @@ public class ExerciseActivity extends AppCompatActivity implements View.OnClickL
         exerciseVideoExample.start();
 
         startVideoOrAddVideo.setOnClickListener(this);
+
+        if (!sharedPref.GetUsername().equals(DataModel.muscles.get(getIntent().getIntExtra("WESEC", 0))
+                .getExercisesList().get(getIntent().getIntExtra("ELTOE", 0)).getCreator()) &&
+                !sharedPref.GetUsername().equals("admin"))
+        {
+            removeDetails.setVisibility(View.GONE);
+            addDetails.setVisibility(View.GONE);
+        }
+        else
+        {
+            removeDetails.setOnClickListener(this);
+            addDetails.setOnClickListener(this);
+        }
+
         builder = new AlertDialog.Builder(this);
     }
 
@@ -166,8 +182,14 @@ public class ExerciseActivity extends AppCompatActivity implements View.OnClickL
     }
 
     void restartapp() {
-        Intent i = new Intent(getApplicationContext(), MainActivity.class);
+        Intent i = new Intent(getApplicationContext(), ExerciseActivity.class);
         startActivity(i);
         finish();
     }
+
+    void hideThings()
+    {
+
+    }
+
 }

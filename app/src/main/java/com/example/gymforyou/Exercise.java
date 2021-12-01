@@ -1,14 +1,18 @@
 package com.example.gymforyou;
 
+import android.widget.VideoView;
+
 public class Exercise {
     private String nameOfExercise;
     private String creator;
     private String descriptionOfExercise;
+    private VideoView exampleVideo;
 
-    public Exercise(String name, String creator, String descriptionOfExercise) {
-        this.nameOfExercise = name;
+    public Exercise(String nameOfExercise, String creator, String descriptionOfExercise, VideoView exampleVideo) {
+        this.nameOfExercise = nameOfExercise;
         this.creator = creator;
         this.descriptionOfExercise = descriptionOfExercise;
+        this.exampleVideo = exampleVideo;
     }
 
     public Exercise() {
@@ -36,6 +40,14 @@ public class Exercise {
 
     public void setDescriptionOfExercise(String descriptionOfExercise) {
         this.descriptionOfExercise = descriptionOfExercise;
+    }
+
+    public VideoView getExampleVideo() {
+        return exampleVideo;
+    }
+
+    public void setExampleVideo(VideoView exampleVideo) {
+        this.exampleVideo = exampleVideo;
     }
 
     @Override

@@ -115,14 +115,16 @@ public class ExercisesListActivity extends AppCompatActivity implements View.OnC
                         DataModel.muscles.get(getIntent().getIntExtra("WE", 0)).addExercise(
                                 new Exercise(nameOfExercise.getText().toString(),
                                         sharedPref.GetUsername(),
-                                        descriptionOfExercise.getText().toString()));
+                                        descriptionOfExercise.getText().toString(),
+                                        null));
                     }
                     else
                     {
                         ArrayList<Exercise> temp = new ArrayList<>();
                         temp.add(new Exercise(nameOfExercise.getText().toString(),
                                 sharedPref.GetUsername(),
-                                descriptionOfExercise.getText().toString()));
+                                descriptionOfExercise.getText().toString(),
+                                null));
                         DataModel.muscles.get(getIntent().getIntExtra("WE", 0)).setExercisesList(temp);
                     }
                     DataModel.muscleSave();

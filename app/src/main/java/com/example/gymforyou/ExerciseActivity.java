@@ -13,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.MediaController;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,12 +22,11 @@ import android.widget.VideoView;
 public class ExerciseActivity extends AppCompatActivity implements View.OnClickListener {
 
     SharedPref sharedPref;
-    TextView nameOfExerciseTv, exerciseCreatorTv, exerciseDescriptionTv;
+    TextView nameOfExerciseTv, exerciseCreatorTv, exerciseDescriptionTv, exerciseDetailsTv;
     AlertDialog.Builder builder;
     VideoView exerciseVideoExample;
-    Button startVideoOrAddVideo;
-    Button addDetails;
-    Button removeDetails;
+    Button startVideoOrAddVideo, editDetails,removeDetails, submitDetails;
+    EditText exerciseDetailsEt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,12 +46,22 @@ public class ExerciseActivity extends AppCompatActivity implements View.OnClickL
         exerciseDescriptionTv.setText(" " + DataModel.muscles.get(getIntent().getIntExtra("WESEC", 0))
                 .getExercisesList().get(getIntent().getIntExtra("ELTOE", 0)).getDescriptionOfExercise() + " ");
 
-        addDetails = findViewById(R.id.addDetails);
+        exerciseDetailsTv = findViewById(R.id.exerciseDetailsTv);
+        exerciseDetailsEt = findViewById(R.id.exerciseDetailsEt);
+        exerciseDetailsEt.setVisibility(View.GONE);
+
+        exerciseDetailsTv.setText(DataModel.muscles.get(getIntent().getIntExtra("WESEC", 0))
+                .getExercisesList().get(getIntent().getIntExtra("ELTOE", 0)).getDetailsOfExercise());
+        exerciseDetailsEt.setText(exerciseDetailsTv.getText());
+
+        submitDetails = findViewById(R.id.submitDetails);
+        submitDetails.setVisibility(View.GONE);
+
+        editDetails = findViewById(R.id.editDetails);
         removeDetails = findViewById(R.id.removeDetails);
 
         //Video
         exerciseVideoExample = findViewById(R.id.exerciseVideoExample);
-
         startVideoOrAddVideo = findViewById(R.id.startVideoOrAddVideo);
 
         if (exerciseVideoExample == null) {
@@ -70,27 +80,55 @@ public class ExerciseActivity extends AppCompatActivity implements View.OnClickL
         exerciseVideoExample.requestFocus();
         exerciseVideoExample.start();
 
-        startVideoOrAddVideo.setOnClickListener(this);
+
 
         if (!sharedPref.GetUsername().equals(DataModel.muscles.get(getIntent().getIntExtra("WESEC", 0))
                 .getExercisesList().get(getIntent().getIntExtra("ELTOE", 0)).getCreator()) &&
                 !sharedPref.GetUsername().equals("admin"))
         {
             removeDetails.setVisibility(View.GONE);
-            addDetails.setVisibility(View.GONE);
+            editDetails.setVisibility(View.GONE);
         }
         else
         {
             removeDetails.setOnClickListener(this);
-            addDetails.setOnClickListener(this);
+            editDetails.setOnClickListener(this);
         }
+
+        submitDetails.setOnClickListener(this);
+        startVideoOrAddVideo.setOnClickListener(this);
 
         builder = new AlertDialog.Builder(this);
     }
 
     @Override
     public void onClick(View view) {
+        if (view == editDetails)
+        {
+            exerciseDetailsEt.setVisibility(View.VISIBLE);
+            exerciseDetailsTv.setVisibility(View.GONE);
 
+            submitDetails.setVisibility(View.VISIBLE);
+            editDetails.setVisibility(View.GONE);
+        }
+        else if (view == submitDetails)
+        {
+            DataModel.muscles.get(getIntent().getIntExtra("WESEC", 0))
+                    .getExercisesList().get(getIntent().getIntExtra("ELTOE", 0)).addDetailsOfExercise(exerciseDetailsEt.getText().toString());
+
+            DataModel.muscleSave();
+
+            restartapp();
+        }
+        else if (view == removeDetails)
+        {
+            DataModel.muscles.get(getIntent().getIntExtra("WESEC", 0))
+                    .getExercisesList().get(getIntent().getIntExtra("ELTOE", 0)).setDetailsOfExercise("");
+
+            DataModel.muscleSave();
+
+            restartapp();
+        }
     }
 
     @Override

@@ -49,6 +49,8 @@ public class Exercise {
 
     public void setDetailsOfExercise(String detailsOfExercise) { this.detailsOfExercise = detailsOfExercise; }
 
+    public void addDetailsOfExercise(String detailsOfExercise) { this.detailsOfExercise = detailsOfExercise; }
+
     @Override
     public String toString() {
         return "Exercise{" +

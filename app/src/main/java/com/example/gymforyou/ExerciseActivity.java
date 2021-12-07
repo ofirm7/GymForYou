@@ -25,9 +25,9 @@ public class ExerciseActivity extends AppCompatActivity implements View.OnClickL
     AlertDialog.Builder builder;
     Button addVideo, editDetails, removeDetails, submitDetails;
     EditText exerciseDetailsEt;
+    TextView noVideoTv;
 
-    static final String url=
-            "https://firebasestorage.googleapis.com/v0/b/gymforyou-81cb2.appspot.com/o/Video.Guru_20210113_130022361.mp4?alt=media&token=e3d350fb-4dce-4984-be9d-a4c73de40dc6";
+    static final String url = null;
     VideoView exerciseVideoExample;
     Uri uriVideo;
     MediaController mc;
@@ -38,7 +38,7 @@ public class ExerciseActivity extends AppCompatActivity implements View.OnClickL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_exercise);
 
-        addVideo = findViewById(R.id.startVideoOrAddVideo);
+        addVideo = findViewById(R.id.addVideo);
 
         nameOfExerciseTv = findViewById(R.id.nameOfExerciseTv);
         nameOfExerciseTv.setText(DataModel.muscles.get(getIntent().getIntExtra("WESEC", 0))
@@ -66,25 +66,36 @@ public class ExerciseActivity extends AppCompatActivity implements View.OnClickL
         editDetails = findViewById(R.id.editDetails);
         removeDetails = findViewById(R.id.removeDetails);
 
+        noVideoTv = findViewById(R.id.noVideoTv);
+        noVideoTv.setVisibility(View.GONE);
+
         //Video
 
         exerciseVideoExample = findViewById(R.id.exerciseVideoExample);
-        addVideo = findViewById(R.id.startVideoOrAddVideo);
+        addVideo = findViewById(R.id.addVideo);
 
+        if (url == null) {
+            exerciseVideoExample.setVisibility(View.GONE);
+//            mc.setEnabled(false);
+            if (isCreatorOrAdmin())
+            {
+                addVideo.setVisibility(View.VISIBLE);
+            }
+            noVideoTv.setVisibility(View.VISIBLE);
+        } else {
+            if (isCreatorOrAdmin()) {
+                addVideo.setText(" Change video");
+            } else {
+                addVideo.setVisibility(View.GONE);
+            }
 
-        if (exerciseVideoExample == null &&
-                (sharedPref.GetUsername().equals(DataModel.muscles.get(getIntent().getIntExtra("WESEC", 0))
-                .getExercisesList().get(getIntent().getIntExtra("ELTOE", 0)).getCreator())
-                || sharedPref.GetUsername().equals("admin"))) {
-            addVideo.setText(" Add video");
+            mc = (MediaController) findViewById(R.id.mc);
+            uriVideo = Uri.parse(url);
+            exerciseVideoExample.setVideoURI(uriVideo);
+            exerciseVideoExample.setMediaController(new MediaController(this));
+            exerciseVideoExample.start();
+            exerciseVideoExample.requestFocus();
         }
-
-        mc=(MediaController)findViewById(R.id.mc);
-        uriVideo = Uri.parse(url);
-        exerciseVideoExample.setVideoURI(uriVideo);
-        exerciseVideoExample.setMediaController(new MediaController(this));
-        exerciseVideoExample.start();
-        exerciseVideoExample.requestFocus();
 
         //
 
@@ -126,9 +137,8 @@ public class ExerciseActivity extends AppCompatActivity implements View.OnClickL
             DataModel.muscleSave();
 
             restartapp();
-        }
-        else if (view == addVideo)
-        {
+        } else if (view == addVideo) {
+
 
         }
     }
@@ -221,8 +231,17 @@ public class ExerciseActivity extends AppCompatActivity implements View.OnClickL
         finish();
     }
 
+    boolean isCreatorOrAdmin()
+    {
+        if (sharedPref.GetUsername().equals(DataModel.muscles.get(getIntent().getIntExtra("WESEC", 0))
+                .getExercisesList().get(getIntent().getIntExtra("ELTOE", 0)).getCreator())
+                || sharedPref.GetUsername().equals("admin"))
+            return true;
+        return false;
+    }
+
     void restartapp() {
-        Intent i = new Intent(getApplicationContext(), ExerciseActivity.class);
+        Intent i = getIntent();
         startActivity(i);
         finish();
     }

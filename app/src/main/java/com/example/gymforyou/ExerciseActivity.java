@@ -4,6 +4,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -23,11 +24,12 @@ public class ExerciseActivity extends AppCompatActivity implements View.OnClickL
     SharedPref sharedPref;
     TextView nameOfExerciseTv, exerciseCreatorTv, exerciseDescriptionTv, exerciseDetailsTv;
     AlertDialog.Builder builder;
-    Button addVideo, editDetails, removeDetails, submitDetails;
-    EditText exerciseDetailsEt;
+    Button openAddVideo, editDetails, removeDetails, submitDetails, addVideo, deleteVideo;
+    EditText exerciseDetailsEt, urlEv;
     TextView noVideoTv;
+    Dialog addDialog;
 
-    static final String url = null;
+    static String url = null;
     VideoView exerciseVideoExample;
     Uri uriVideo;
     MediaController mc;
@@ -38,7 +40,7 @@ public class ExerciseActivity extends AppCompatActivity implements View.OnClickL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_exercise);
 
-        addVideo = findViewById(R.id.addVideo);
+        openAddVideo = findViewById(R.id.addVideo);
 
         nameOfExerciseTv = findViewById(R.id.nameOfExerciseTv);
         nameOfExerciseTv.setText(DataModel.muscles.get(getIntent().getIntExtra("WESEC", 0))
@@ -69,24 +71,31 @@ public class ExerciseActivity extends AppCompatActivity implements View.OnClickL
         noVideoTv = findViewById(R.id.noVideoTv);
         noVideoTv.setVisibility(View.GONE);
 
+        deleteVideo = findViewById(R.id.deleteVideo);
+
         //Video
 
         exerciseVideoExample = findViewById(R.id.exerciseVideoExample);
-        addVideo = findViewById(R.id.addVideo);
+        openAddVideo = findViewById(R.id.addVideo);
+
+        url = DataModel.muscles.get(getIntent().getIntExtra("WESEC", 0))
+                .getExercisesList().get(getIntent().getIntExtra("ELTOE", 0)).getUrl();
 
         if (url == null) {
             exerciseVideoExample.setVisibility(View.GONE);
 //            mc.setEnabled(false);
             if (isCreatorOrAdmin())
             {
-                addVideo.setVisibility(View.VISIBLE);
+                openAddVideo.setVisibility(View.VISIBLE);
             }
             noVideoTv.setVisibility(View.VISIBLE);
+            deleteVideo.setVisibility(View.GONE);
         } else {
             if (isCreatorOrAdmin()) {
-                addVideo.setText(" Change video");
+                openAddVideo.setText(" Change video");
             } else {
-                addVideo.setVisibility(View.GONE);
+                openAddVideo.setVisibility(View.GONE);
+                deleteVideo.setVisibility(View.GONE);
             }
 
             mc = (MediaController) findViewById(R.id.mc);
@@ -110,7 +119,8 @@ public class ExerciseActivity extends AppCompatActivity implements View.OnClickL
         }
 
         submitDetails.setOnClickListener(this);
-        addVideo.setOnClickListener(this);
+        openAddVideo.setOnClickListener(this);
+        deleteVideo.setOnClickListener(this);
 
         builder = new AlertDialog.Builder(this);
     }
@@ -137,10 +147,65 @@ public class ExerciseActivity extends AppCompatActivity implements View.OnClickL
             DataModel.muscleSave();
 
             restartapp();
-        } else if (view == addVideo) {
-
-
+        } else if (view == openAddVideo) {
+            OpenAddVideoDialog();
         }
+        else if(view == deleteVideo)
+        {
+            builder.setMessage("Do you want to delete this video?")
+                    .setCancelable(false)
+                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            finish();
+
+                            DataModel.muscles.get(getIntent().getIntExtra("WESEC", 0))
+                                    .getExercisesList().get(getIntent().getIntExtra("ELTOE", 0)).setUrl(null);
+                            DataModel.muscleSave();
+
+                            Toast.makeText(getApplicationContext(), "You deleted the video",
+                                    Toast.LENGTH_SHORT).show();
+                            restartapp();
+                        }
+                    })
+                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            //  Action for 'NO' Button
+                            dialog.cancel();
+                            Toast.makeText(getApplicationContext(), "You canceled the delete",
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    });
+            AlertDialog alert = builder.create();
+            alert.setTitle("Delete Video");
+            alert.show();
+        }
+    }
+
+    public void OpenAddVideoDialog() {
+        addDialog = new Dialog(this);
+        addDialog.setContentView(R.layout.custom_dialog_add_video_url);
+        addDialog.setTitle("Add Video");
+
+        addDialog.setCancelable(true);
+
+        urlEv = addDialog.findViewById(R.id.urlEv);
+        addVideo = addDialog.findViewById(R.id.addVideo);
+
+        addVideo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(v == addVideo)
+                {
+                    DataModel.muscles.get(getIntent().getIntExtra("WESEC", 0))
+                            .getExercisesList().get(getIntent().getIntExtra("ELTOE", 0)).setUrl(urlEv.getText().toString());
+                    DataModel.muscleSave();
+                    addDialog.dismiss();
+                    restartapp();
+                }
+            }
+        });
+
+        addDialog.show();
     }
 
     @Override

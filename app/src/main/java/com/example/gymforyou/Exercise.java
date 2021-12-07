@@ -5,14 +5,15 @@ import android.widget.VideoView;
 public class Exercise {
     private String nameOfExercise;
     private String creator;
-    private String descriptionOfExercise, detailsOfExercise;
+    private String descriptionOfExercise, detailsOfExercise, url;
     private VideoView exampleVideo;
 
-    public Exercise(String nameOfExercise, String creator, String descriptionOfExercise, String detailsOfExercise, VideoView exampleVideo) {
+    public Exercise(String nameOfExercise, String creator, String descriptionOfExercise, String detailsOfExercise, String url, VideoView exampleVideo) {
         this.nameOfExercise = nameOfExercise;
         this.creator = creator;
         this.descriptionOfExercise = descriptionOfExercise;
         this.detailsOfExercise = detailsOfExercise;
+        this.url = url;
         this.exampleVideo = exampleVideo;
     }
 
@@ -50,6 +51,14 @@ public class Exercise {
     public void setDetailsOfExercise(String detailsOfExercise) { this.detailsOfExercise = detailsOfExercise; }
 
     public void addDetailsOfExercise(String detailsOfExercise) { this.detailsOfExercise = detailsOfExercise; }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
 
     @Override
     public String toString() {

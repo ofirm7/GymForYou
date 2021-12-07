@@ -8,7 +8,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,7 +23,7 @@ public class ExerciseActivity extends AppCompatActivity implements View.OnClickL
     SharedPref sharedPref;
     TextView nameOfExerciseTv, exerciseCreatorTv, exerciseDescriptionTv, exerciseDetailsTv;
     AlertDialog.Builder builder;
-    Button startVideoOrAddVideo, editDetails, removeDetails, submitDetails;
+    Button addVideo, editDetails, removeDetails, submitDetails;
     EditText exerciseDetailsEt;
 
     static final String url=
@@ -39,7 +38,7 @@ public class ExerciseActivity extends AppCompatActivity implements View.OnClickL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_exercise);
 
-        startVideoOrAddVideo = findViewById(R.id.startVideoOrAddVideo);
+        addVideo = findViewById(R.id.startVideoOrAddVideo);
 
         nameOfExerciseTv = findViewById(R.id.nameOfExerciseTv);
         nameOfExerciseTv.setText(DataModel.muscles.get(getIntent().getIntExtra("WESEC", 0))
@@ -70,13 +69,14 @@ public class ExerciseActivity extends AppCompatActivity implements View.OnClickL
         //Video
 
         exerciseVideoExample = findViewById(R.id.exerciseVideoExample);
-        startVideoOrAddVideo = findViewById(R.id.startVideoOrAddVideo);
+        addVideo = findViewById(R.id.startVideoOrAddVideo);
 
 
-        if (exerciseVideoExample == null) {
-            startVideoOrAddVideo.setText(" Add video");
-        } else {
-            startVideoOrAddVideo.setText("play");
+        if (exerciseVideoExample == null &&
+                (sharedPref.GetUsername().equals(DataModel.muscles.get(getIntent().getIntExtra("WESEC", 0))
+                .getExercisesList().get(getIntent().getIntExtra("ELTOE", 0)).getCreator())
+                || sharedPref.GetUsername().equals("admin"))) {
+            addVideo.setText(" Add video");
         }
 
         mc=(MediaController)findViewById(R.id.mc);
@@ -99,7 +99,7 @@ public class ExerciseActivity extends AppCompatActivity implements View.OnClickL
         }
 
         submitDetails.setOnClickListener(this);
-        startVideoOrAddVideo.setOnClickListener(this);
+        addVideo.setOnClickListener(this);
 
         builder = new AlertDialog.Builder(this);
     }
@@ -126,6 +126,10 @@ public class ExerciseActivity extends AppCompatActivity implements View.OnClickL
             DataModel.muscleSave();
 
             restartapp();
+        }
+        else if (view == addVideo)
+        {
+
         }
     }
 

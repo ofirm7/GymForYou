@@ -24,15 +24,22 @@ public class ExerciseActivity extends AppCompatActivity implements View.OnClickL
     SharedPref sharedPref;
     TextView nameOfExerciseTv, exerciseCreatorTv, exerciseDescriptionTv, exerciseDetailsTv;
     AlertDialog.Builder builder;
-    VideoView exerciseVideoExample;
-    Button startVideoOrAddVideo, editDetails,removeDetails, submitDetails;
+    Button startVideoOrAddVideo, editDetails, removeDetails, submitDetails;
     EditText exerciseDetailsEt;
+
+    static final String url=
+            "https://firebasestorage.googleapis.com/v0/b/gymforyou-81cb2.appspot.com/o/Video.Guru_20210113_130022361.mp4?alt=media&token=e3d350fb-4dce-4984-be9d-a4c73de40dc6";
+    VideoView exerciseVideoExample;
+    Uri uriVideo;
+    MediaController mc;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         sharedPref = new SharedPref(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_exercise);
+
+        startVideoOrAddVideo = findViewById(R.id.startVideoOrAddVideo);
 
         nameOfExerciseTv = findViewById(R.id.nameOfExerciseTv);
         nameOfExerciseTv.setText(DataModel.muscles.get(getIntent().getIntExtra("WESEC", 0))
@@ -61,8 +68,10 @@ public class ExerciseActivity extends AppCompatActivity implements View.OnClickL
         removeDetails = findViewById(R.id.removeDetails);
 
         //Video
+
         exerciseVideoExample = findViewById(R.id.exerciseVideoExample);
         startVideoOrAddVideo = findViewById(R.id.startVideoOrAddVideo);
+
 
         if (exerciseVideoExample == null) {
             startVideoOrAddVideo.setText(" Add video");
@@ -70,27 +79,21 @@ public class ExerciseActivity extends AppCompatActivity implements View.OnClickL
             startVideoOrAddVideo.setText("play");
         }
 
-        MediaController mediaController = new MediaController(this);
-        mediaController.setAnchorView(exerciseVideoExample);
-
-        Uri uri = Uri.parse(Environment.getExternalStorageDirectory().getPath() + "VID-20200121-WA0034[1].mp4");
-
-        exerciseVideoExample.setMediaController(mediaController);
-        exerciseVideoExample.setVideoURI(uri);
-        exerciseVideoExample.requestFocus();
+        mc=(MediaController)findViewById(R.id.mc);
+        uriVideo = Uri.parse(url);
+        exerciseVideoExample.setVideoURI(uriVideo);
+        exerciseVideoExample.setMediaController(new MediaController(this));
         exerciseVideoExample.start();
+        exerciseVideoExample.requestFocus();
 
-
+        //
 
         if (!sharedPref.GetUsername().equals(DataModel.muscles.get(getIntent().getIntExtra("WESEC", 0))
                 .getExercisesList().get(getIntent().getIntExtra("ELTOE", 0)).getCreator()) &&
-                !sharedPref.GetUsername().equals("admin"))
-        {
+                !sharedPref.GetUsername().equals("admin")) {
             removeDetails.setVisibility(View.GONE);
             editDetails.setVisibility(View.GONE);
-        }
-        else
-        {
+        } else {
             removeDetails.setOnClickListener(this);
             editDetails.setOnClickListener(this);
         }
@@ -103,25 +106,20 @@ public class ExerciseActivity extends AppCompatActivity implements View.OnClickL
 
     @Override
     public void onClick(View view) {
-        if (view == editDetails)
-        {
+        if (view == editDetails) {
             exerciseDetailsEt.setVisibility(View.VISIBLE);
             exerciseDetailsTv.setVisibility(View.GONE);
 
             submitDetails.setVisibility(View.VISIBLE);
             editDetails.setVisibility(View.GONE);
-        }
-        else if (view == submitDetails)
-        {
+        } else if (view == submitDetails) {
             DataModel.muscles.get(getIntent().getIntExtra("WESEC", 0))
                     .getExercisesList().get(getIntent().getIntExtra("ELTOE", 0)).addDetailsOfExercise(exerciseDetailsEt.getText().toString());
 
             DataModel.muscleSave();
 
             restartapp();
-        }
-        else if (view == removeDetails)
-        {
+        } else if (view == removeDetails) {
             DataModel.muscles.get(getIntent().getIntExtra("WESEC", 0))
                     .getExercisesList().get(getIntent().getIntExtra("ELTOE", 0)).setDetailsOfExercise("");
 
@@ -225,8 +223,7 @@ public class ExerciseActivity extends AppCompatActivity implements View.OnClickL
         finish();
     }
 
-    void hideThings()
-    {
+    void hideThings() {
 
     }
 

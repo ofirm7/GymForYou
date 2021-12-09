@@ -50,7 +50,7 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
             } else if (!isEmailValid(email.getText().toString())) {
                 Toast.makeText(this, "email is not valid", Toast.LENGTH_SHORT).show();
                 return;
-            } else if (phoneNumber.getText().toString().length() != 10) {
+            } else if (!isPhoneNumberValid()) {
                 Toast.makeText(this, "phone number is not valid", Toast.LENGTH_SHORT).show();
                 return;
             } else if (pass.getText().toString().length() < 6 || pass.getText().toString().length() > 18 ||
@@ -74,6 +74,7 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
                     if (DataModel.users.get(i).getPhoneNumber().equals(phoneNumber.getText().toString()))
                         flagP = true;
                 }
+
                 if (flagU && flagE) {
                     Toast.makeText(this, "username and email are taken", Toast.LENGTH_SHORT).show();
                     return;
@@ -89,7 +90,7 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
                 }
 
                 //DataModel.users.add(new User(username.toString(), pass.toString()));
-                DataModel.users.add(new User(username.getText().toString(), pass.getText().toString(), pass.getText().toString(),
+                DataModel.users.add(new User(username.getText().toString(), pass.getText().toString(), email.getText().toString(),
                         phoneNumber.getText().toString()));
                 DataModel.userSave();
                 sharedPref.SetUsername(username.getText().toString());
@@ -101,6 +102,34 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
             finish();
         }
     }
+
+    public boolean isPhoneNumberValid()
+    {
+        Boolean isValid = false;
+        char[] phoneNumberCA = phoneNumber.getText().toString().toCharArray();
+        if (phoneNumber.getText().toString().length() != 10 || phoneNumberCA[0] != '0')
+        {
+            return false;
+        }
+        else
+        {
+            for (int i = 1; i < phoneNumber.length(); i++)
+            {
+                for (int j = 49; j < 59; j++)
+                {
+                    if (phoneNumberCA[i] == j)
+                    {
+                        isValid = true;
+                        j = 59;
+                    }
+                }
+                if (!isValid)
+                    return false;
+            }
+            return true;
+        }
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

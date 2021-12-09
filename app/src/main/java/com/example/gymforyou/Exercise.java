@@ -7,14 +7,17 @@ public class Exercise {
     private String creator;
     private String descriptionOfExercise, detailsOfExercise, url;
     private VideoView exampleVideo;
+    private String isWaitingForApprove;
 
-    public Exercise(String nameOfExercise, String creator, String descriptionOfExercise, String detailsOfExercise, String url, VideoView exampleVideo) {
+    public Exercise(String nameOfExercise, String creator, String descriptionOfExercise,
+                    String detailsOfExercise, String url, VideoView exampleVideo, String isWaitingForApprove) {
         this.nameOfExercise = nameOfExercise;
         this.creator = creator;
         this.descriptionOfExercise = descriptionOfExercise;
         this.detailsOfExercise = detailsOfExercise;
         this.url = url;
         this.exampleVideo = exampleVideo;
+        this.isWaitingForApprove = isWaitingForApprove;
     }
 
     public Exercise() {
@@ -58,6 +61,14 @@ public class Exercise {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public String getIsWaitingForApprove() {
+        return isWaitingForApprove;
+    }
+
+    public void setIsWaitingForApprove(String isWaitingForApprove) {
+        this.isWaitingForApprove = isWaitingForApprove;
     }
 
     @Override

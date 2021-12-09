@@ -40,7 +40,7 @@ public class ExerciseActivity extends AppCompatActivity implements View.OnClickL
     SharedPref sharedPref;
     TextView nameOfExerciseTv, exerciseCreatorTv, exerciseDescriptionTv, exerciseDetailsTv;
     AlertDialog.Builder builder;
-    Button openAddVideo, editDetails, removeDetails, submitDetails, addVideo, deleteVideo;
+    Button changeOrAddVideo, editDetails, removeDetails, submitDetails, addVideo, deleteVideo;
     EditText exerciseDetailsEt, urlEv;
     TextView noVideoTv;
     Dialog addDialog;
@@ -58,7 +58,7 @@ public class ExerciseActivity extends AppCompatActivity implements View.OnClickL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_exercise);
 
-        openAddVideo = findViewById(R.id.addVideo);
+        changeOrAddVideo = findViewById(R.id.addVideo);
 
         nameOfExerciseTv = findViewById(R.id.nameOfExerciseTv);
         nameOfExerciseTv.setText(DataModel.muscles.get(getIntent().getIntExtra("WESEC", 0))
@@ -94,25 +94,32 @@ public class ExerciseActivity extends AppCompatActivity implements View.OnClickL
         //Video
 
         exerciseVideoExample = findViewById(R.id.exerciseVideoExample);
-        openAddVideo = findViewById(R.id.addVideo);
+        changeOrAddVideo = findViewById(R.id.addVideo);
 
         url = DataModel.muscles.get(getIntent().getIntExtra("WESEC", 0))
                 .getExercisesList().get(getIntent().getIntExtra("ELTOE", 0)).getUrl();
 
+        changeOrAddVideo.setVisibility(View.GONE);
         if (url == null) {
             exerciseVideoExample.setVisibility(View.GONE);
 //            mc.setEnabled(false);
             if (isCreatorOrAdmin())
             {
-                openAddVideo.setVisibility(View.VISIBLE);
+                changeOrAddVideo.setVisibility(View.VISIBLE);
+                if (DataModel.muscles.get(getIntent().getIntExtra("WESEC", 0))
+                        .getExercisesList().get(getIntent().getIntExtra("ELTOE", 0)).getIsWaitingForApprove() == "true")
+                {
+                    noVideoTv.setText("Video uploaded and " +
+                            "waiting for approve!");
+                    changeOrAddVideo.setText(" Change video");
+                }
             }
             noVideoTv.setVisibility(View.VISIBLE);
             deleteVideo.setVisibility(View.GONE);
         } else {
             if (isCreatorOrAdmin()) {
-                openAddVideo.setText(" Change video");
+                changeOrAddVideo.setText(" Change video");
             } else {
-                openAddVideo.setVisibility(View.GONE);
                 deleteVideo.setVisibility(View.GONE);
             }
 
@@ -137,7 +144,7 @@ public class ExerciseActivity extends AppCompatActivity implements View.OnClickL
         }
 
         submitDetails.setOnClickListener(this);
-        openAddVideo.setOnClickListener(this);
+        changeOrAddVideo.setOnClickListener(this);
         deleteVideo.setOnClickListener(this);
 
         builder = new AlertDialog.Builder(this);
@@ -165,7 +172,7 @@ public class ExerciseActivity extends AppCompatActivity implements View.OnClickL
             DataModel.muscleSave();
 
             restartapp();
-        } else if (view == openAddVideo) {
+        } else if (view == changeOrAddVideo) {
             // Code for showing progressDialog while uploading
             progressDialog = new ProgressDialog(ExerciseActivity.this);
             chooseVideo();
@@ -248,6 +255,10 @@ public class ExerciseActivity extends AppCompatActivity implements View.OnClickL
                     // Dismiss dialog
                     progressDialog.dismiss();
                     Toast.makeText(ExerciseActivity.this, "Video Uploaded!!", Toast.LENGTH_SHORT).show();
+                    DataModel.muscles.get(getIntent().getIntExtra("WESEC", 0))
+                            .getExercisesList().get(getIntent().getIntExtra("ELTOE", 0)).setIsWaitingForApprove("true");
+                    DataModel.muscleSave();
+                    restartapp();
                 }
             }).addOnFailureListener(new OnFailureListener() {
                 @Override

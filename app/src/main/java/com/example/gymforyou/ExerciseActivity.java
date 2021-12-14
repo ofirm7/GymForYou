@@ -106,18 +106,12 @@ public class ExerciseActivity extends AppCompatActivity implements View.OnClickL
             if (isCreatorOrAdmin())
             {
                 changeOrAddVideo.setVisibility(View.VISIBLE);
-                if (DataModel.muscles.get(getIntent().getIntExtra("WESEC", 0))
-                        .getExercisesList().get(getIntent().getIntExtra("ELTOE", 0)).getIsWaitingForApprove() == "true")
-                {
-                    noVideoTv.setText("Video uploaded and " +
-                            "waiting for approve!");
-                    changeOrAddVideo.setText(" Change video");
-                }
             }
             noVideoTv.setVisibility(View.VISIBLE);
             deleteVideo.setVisibility(View.GONE);
         } else {
             if (isCreatorOrAdmin()) {
+                changeOrAddVideo.setVisibility(View.VISIBLE);
                 changeOrAddVideo.setText(" Change video");
             } else {
                 deleteVideo.setVisibility(View.GONE);
@@ -256,7 +250,8 @@ public class ExerciseActivity extends AppCompatActivity implements View.OnClickL
                     progressDialog.dismiss();
                     Toast.makeText(ExerciseActivity.this, "Video Uploaded!!", Toast.LENGTH_SHORT).show();
                     DataModel.muscles.get(getIntent().getIntExtra("WESEC", 0))
-                            .getExercisesList().get(getIntent().getIntExtra("ELTOE", 0)).setIsWaitingForApprove("true");
+                            .getExercisesList().get(getIntent().getIntExtra("ELTOE",
+                            0)).setUrl(downloadUri);
                     DataModel.muscleSave();
                     restartapp();
                 }

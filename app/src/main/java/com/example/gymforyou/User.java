@@ -2,10 +2,10 @@ package com.example.gymforyou;
 
 public class User {
 
-    private String username;
-    private String password;
-    private String email;
-    private String phoneNumber;
+    protected String username;
+    protected String password;
+    protected String email;
+    protected String phoneNumber;
 
     public User(String username, String password, String email, String phoneNumber) {
         this.username = username;

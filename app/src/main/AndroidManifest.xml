@@ -2,11 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.gymforyou">
 
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-feature android:name="android.hardware.camera"
-        android:required="true" />
-
-
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -14,7 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.GymForYou">
-        <activity android:name=".ExerciseActivity"></activity>
+        <activity android:name=".UsersListActivity" />
+        <activity android:name=".ExerciseActivity" />
         <activity android:name=".MusclesListActivity" />
         <activity android:name=".SignUp" />
         <activity android:name=".LoadingActivity">
@@ -29,5 +25,10 @@
         <activity android:name=".MainActivity" />
     </application>
 
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="true" />
+
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
 </manifest>

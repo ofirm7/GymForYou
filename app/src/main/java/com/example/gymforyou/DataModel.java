@@ -9,6 +9,7 @@ public class DataModel {
 
     static public ArrayList<User> users = new ArrayList<>();
     static public  ArrayList<Muscle> muscles = new ArrayList<>();
+    static public ArrayList<Admin> admins = new ArrayList<>();
     public static void userSave()
     {
         FirebaseDatabase.getInstance().getReference("user").setValue(DataModel.users);

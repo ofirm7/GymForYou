@@ -34,6 +34,8 @@ public class UsersListActivity extends AppCompatActivity implements AdapterView.
     int adminLevel = 0;
     Button submitInDialog;
 
+    int userPos = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         sharedPref = new SharedPref(this);
@@ -103,7 +105,8 @@ public class UsersListActivity extends AppCompatActivity implements AdapterView.
                         Toast.makeText(UsersListActivity.this, "Please choose a level!", Toast.LENGTH_LONG).show();
                     }
                     else {
-                        
+                        DataModel.admins.add(new Admin(DataModel.users.get(userPos).username, DataModel.users.get(userPos).password,
+                                DataModel.users.get(userPos).email, DataModel.users.get(userPos).phoneNumber, adminLevel));
                     }
                     makeAnAdminDialog.dismiss();
                     restartapp();
@@ -119,7 +122,8 @@ public class UsersListActivity extends AppCompatActivity implements AdapterView.
                 .setCancelable(false)
                 .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-
+                        userPos = i;
+                        openMakeAnAdminDialog();
                     }
                 })
                 .setNegativeButton("No", new DialogInterface.OnClickListener() {

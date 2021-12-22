@@ -38,6 +38,7 @@ public class LoginPage extends AppCompatActivity implements View.OnClickListener
                 Toast.makeText(this, "fill in all boxes", Toast.LENGTH_SHORT).show();
             } else {
                 boolean flag = false;
+                boolean isAdmin = false;
                 int temp = 0;
                 for (int i = 0; i < DataModel.users.size() && !flag; i++) {
                     if (DataModel.users.get(i).getUsername().equals(usernameOrEmail.getText().toString())
@@ -46,21 +47,37 @@ public class LoginPage extends AppCompatActivity implements View.OnClickListener
                         temp = i;
                     }
                 }
+                for (int j = 0; j < DataModel.admins.size() && !flag; j++) {
+                    if (DataModel.admins.get(j).getUsername().equals(usernameOrEmail.getText().toString())
+                            || DataModel.admins.get(j).getEmail().equals(usernameOrEmail.getText().toString())) {
+                        flag = true;
+                        temp = j;
+                        isAdmin = true;
+                    }
+                }
                 if (!flag) {
                     Toast.makeText(this, "No account with that username / email", Toast.LENGTH_SHORT).show();
-                } else {
+                } else if (!isAdmin) {
                     if (DataModel.users.get(temp).getPassword().equals(pass.getText().toString())
                             && DataModel.users.get(temp).getUsername().equals(usernameOrEmail.getText().toString())
                             || DataModel.users.get(temp).getPassword().equals(pass.getText().toString())
                             && DataModel.users.get(temp).getEmail().equals(usernameOrEmail.getText().toString())) {
                         sharedPref.SetUsername(DataModel.users.get(temp).getUsername());
                         finish();
-
+                    }
+                } else {
+                    if (DataModel.admins.get(temp).getPassword().equals(pass.getText().toString())
+                            && DataModel.admins.get(temp).getUsername().equals(usernameOrEmail.getText().toString())
+                            || DataModel.admins.get(temp).getPassword().equals(pass.getText().toString())
+                            && DataModel.admins.get(temp).getEmail().equals(usernameOrEmail.getText().toString())) {
+                        sharedPref.SetUsername(DataModel.admins.get(temp).getUsername());
+                        finish();
                     }
                 }
             }
         }
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

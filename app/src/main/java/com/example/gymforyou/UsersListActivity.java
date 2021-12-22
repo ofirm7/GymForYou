@@ -27,7 +27,7 @@ public class UsersListActivity extends AppCompatActivity implements AdapterView.
     SharedPref sharedPref;
 
     MyListAdapter usersListAdapter;
-    ArrayList<String> aTitle, aDescription;
+    ArrayList<String> aTitle = new ArrayList<>(), aDescription = new ArrayList<>();
     ListView usersList;
 
     Dialog makeAnAdminDialog;
@@ -46,6 +46,8 @@ public class UsersListActivity extends AppCompatActivity implements AdapterView.
             aTitle.add(DataModel.users.get(i).username);
             aDescription.add("");
         }
+
+        builder = new AlertDialog.Builder(this);
 
         usersList = findViewById(R.id.usersList);
         usersListAdapter = new MyListAdapter(this, aTitle, aDescription);
@@ -93,7 +95,7 @@ public class UsersListActivity extends AppCompatActivity implements AdapterView.
 
         makeAnAdminDialog.setCancelable(true);
 
-        submitInDialog = submitInDialog.findViewById(R.id.makeAnAdminButton);
+        submitInDialog = makeAnAdminDialog.findViewById(R.id.makeAnAdminButton);
 
         submitInDialog.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -105,14 +107,21 @@ public class UsersListActivity extends AppCompatActivity implements AdapterView.
                         Toast.makeText(UsersListActivity.this, "Please choose a level!", Toast.LENGTH_LONG).show();
                     }
                     else {
+                        //saving as admin
                         DataModel.admins.add(new Admin(DataModel.users.get(userPos).username, DataModel.users.get(userPos).password,
                                 DataModel.users.get(userPos).email, DataModel.users.get(userPos).phoneNumber, adminLevel));
+                        DataModel.adminsSave();
+
+                        //remove the new admin from users list
+                        DataModel.users.remove(userPos);
+                        DataModel.userSave();
                     }
                     makeAnAdminDialog.dismiss();
                     restartapp();
                 }
             }
         });
+        makeAnAdminDialog.show();
     }
 
     @Override
@@ -135,7 +144,7 @@ public class UsersListActivity extends AppCompatActivity implements AdapterView.
                     }
                 });
         AlertDialog alert = builder.create();
-        alert.setTitle("Logout");
+        alert.setTitle("Make Admin");
         alert.show();
 
     }

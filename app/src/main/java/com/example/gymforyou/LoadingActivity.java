@@ -21,6 +21,7 @@ public class LoadingActivity extends AppCompatActivity {
     FirebaseDatabase database;
     DatabaseReference dbUserRef;
     DatabaseReference dbMuscleRef;
+    DatabaseReference dbAdminsRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +31,7 @@ public class LoadingActivity extends AppCompatActivity {
         database = FirebaseDatabase.getInstance();
         dbUserRef = database.getReference("user");
         dbMuscleRef = database.getReference("muscles");
+        dbAdminsRef = database.getReference("admins");
 
         dbMuscleRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -54,15 +56,32 @@ public class LoadingActivity extends AppCompatActivity {
                 ArrayList<User> fbUsers = dataSnapshot.getValue(t);
                 DataModel.users.clear();
                     DataModel.users.addAll(fbUsers);
-
-                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                startActivityForResult(intent, 0);
             }
 
             @Override
             public void onCancelled(DatabaseError error) {
                 // Failed to read value
                 Log.w("GymForYou", "Failed to read value.", error.toException());
+            }
+        });
+
+        dbAdminsRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                GenericTypeIndicator<ArrayList<Admin>> t = new GenericTypeIndicator<ArrayList<Admin>>() {};
+                ArrayList<Admin> fbAdmins = snapshot.getValue(t);
+                DataModel.admins.clear();
+                DataModel.admins.addAll(fbAdmins);
+
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                startActivityForResult(intent, 0);
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
             }
         });
 

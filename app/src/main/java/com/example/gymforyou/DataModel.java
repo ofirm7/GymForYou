@@ -20,5 +20,9 @@ public class DataModel {
         FirebaseDatabase.getInstance().getReference("muscles").setValue(DataModel.muscles);
     }
 
+    public  static void  adminsSave()
+    {
+        FirebaseDatabase.getInstance().getReference("admins").setValue(DataModel.admins);
+    }
 
 }

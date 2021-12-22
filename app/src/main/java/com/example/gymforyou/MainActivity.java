@@ -12,13 +12,16 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    Button toExercises, toGyms;
+    Button toExercises, toGyms, toUsersList;
     SharedPref sharedPref;
     AlertDialog.Builder builder;
+
+    LinearLayout adminsLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +35,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         builder = new AlertDialog.Builder(this);
 
+        toUsersList = findViewById(R.id.toUsersList);
+
+        adminsLayout = findViewById(R.id.adminsLayout);
+        //adminsLayout.setVisibility(View.GONE);
+
+        toUsersList.setOnClickListener(this);
         toGyms.setOnClickListener(this);
         toExercises.setOnClickListener(this);
     }
@@ -41,14 +50,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (view == toExercises) {
             Intent intent1 = new Intent(this, MusclesListActivity.class);
             startActivity(intent1);
-        } else if(view == toGyms){
-            if (sharedPref.GetUsername().equals("YouRGuest"))
-            {
+        } else if (view == toGyms) {
+            if (sharedPref.GetUsername().equals("YouRGuest")) {
                 builder.setMessage("This page is only for users")
                         .setCancelable(false)
                         .setPositiveButton("Login", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-                                Intent intent = new Intent(MainActivity.this,LoginPage.class);
+                                Intent intent = new Intent(MainActivity.this, LoginPage.class);
                                 startActivityForResult(intent, 0);
                             }
                         })
@@ -61,8 +69,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 AlertDialog alert = builder.create();
                 alert.setTitle("Gyms");
                 alert.show();
-            }
-            else {
+            } else {
                 // Search for gyms nearby
                 Uri gmmIntentUri = Uri.parse("geo:0,0?q=gym");
 
@@ -80,6 +87,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     startActivity(mapIntent);
                 }
             }
+        } else if (view == toUsersList)
+        {
+            Intent intent = new Intent(this, UsersListActivity.class);
+            startActivityForResult(intent, 0);
         }
 
     }

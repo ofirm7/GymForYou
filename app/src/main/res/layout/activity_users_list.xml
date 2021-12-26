@@ -5,12 +5,20 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".UsersListActivity">
+>
 
-    <ListView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/usersList"
-        />
+        android:orientation="vertical"
+        tools:context=".UsersListActivity">
+
+        <ListView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/usersList"
+            />
+
+    </LinearLayout>
 
 </RelativeLayout>

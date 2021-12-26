@@ -17,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class TrainingPlansListActivity extends AppCompatActivity {
 
@@ -40,58 +41,7 @@ public class TrainingPlansListActivity extends AppCompatActivity {
         dontHaveTrainingPlansTV = findViewById(R.id.dontHaveTrainingPlansTV);
         dontHaveTrainingPlansTV.setVisibility(View.GONE);
 
-        Boolean isAdminVar = sharedPref.isAdmin();
-
-        //checking the position of the user
-        int i;
-        boolean stopLoop = false;
-        //checking if user
-        if (isAdminVar)
-        {
-            for (i = 0; i < DataModel.admins.size() && !stopLoop; i++)
-            {
-                if (DataModel.admins.get(i).getUsername() == sharedPref.GetUsername())
-                {
-                    stopLoop = true;
-                    break;
-                }
-            }
-            if (DataModel.admins.get(i).getTrainingPlansList() != null)
-            {
-                for (int j = 0; j < DataModel.admins.get(i).getTrainingPlansList().size(); j++) {
-                    aTitle.add(DataModel.admins.get(i).getTrainingPlansList().get(j).getNameOfTrainingPlan());
-                    aDescription.add(DataModel.admins.get(i).getTrainingPlansList().get(j).getTypeOfTrainingPlan());
-                }
-            }
-            else {
-                dontHaveTrainingPlansTV.setVisibility(View.VISIBLE);
-            }
-        }
-        else
-        {
-            for (i = 0; i < DataModel.users.size() && !stopLoop; i++)
-            {
-                if (DataModel.users.get(i).getUsername() == sharedPref.GetUsername())
-                {
-                    stopLoop = true;
-                }
-            }
-            if (DataModel.users.get(i).getTrainingPlansList() != null)
-            {
-                for (int j = 0; j < DataModel.users.get(i).getTrainingPlansList().size(); j++) {
-                    aTitle.add(DataModel.users.get(i).getTrainingPlansList().get(j).getNameOfTrainingPlan());
-                    aDescription.add(DataModel.users.get(i).getTrainingPlansList().get(j).getTypeOfTrainingPlan());
-                }
-            }
-            else {
-                dontHaveTrainingPlansTV.setVisibility(View.VISIBLE);
-            }
-        }
-
-        adapter3 = new MyListAdapter(this, aTitle, aDescription);
-
-        trainingPlansList = findViewById(R.id.LTest);
-        trainingPlansList.setAdapter(adapter3);
+        makeListFunc();
 
         openAddDialog = findViewById(R.id.openAddDialog);
 
@@ -99,14 +49,60 @@ public class TrainingPlansListActivity extends AppCompatActivity {
 
     }
 
+    public void makeListFunc() {
+        Boolean isAdminVar = sharedPref.isAdmin();
+        //checking the position of the user
+        int i;
+        boolean stopLoop = false;
+        //checking if user
+        if (isAdminVar) {
+            for (i = 0; i < DataModel.admins.size(); i++) {
+                if (sharedPref.GetUsername().equals(DataModel.admins.get(i).getUsername())) {
+                    stopLoop = true;
+                    break;
+                }
+            }
+            if (DataModel.admins.get(i).getTrainingPlansList() != null) {
+                for (int j = 0; j < DataModel.admins.get(i).getTrainingPlansList().size(); j++) {
+                    aTitle.add(DataModel.admins.get(i).getTrainingPlansList().get(j).getNameOfTrainingPlan());
+                    aDescription.add(DataModel.admins.get(i).getTrainingPlansList().get(j).getTypeOfTrainingPlan());
+                }
+                adapter3 = new MyListAdapter(this, aTitle, aDescription);
+
+                trainingPlansList = findViewById(R.id.LTest);
+                trainingPlansList.setAdapter(adapter3);
+            } else {
+                dontHaveTrainingPlansTV.setVisibility(View.VISIBLE);
+            }
+        } else {
+            for (i = 0; i < DataModel.users.size() && !stopLoop; i++) {
+                if (DataModel.users.get(i).getUsername() == sharedPref.GetUsername()) {
+                    stopLoop = true;
+                }
+            }
+            if (DataModel.users.get(i).getTrainingPlansList() != null) {
+                for (int j = 0; j < DataModel.users.get(i).getTrainingPlansList().size(); j++) {
+                    aTitle.add(DataModel.users.get(i).getTrainingPlansList().get(j).getNameOfTrainingPlan());
+                    aDescription.add(DataModel.users.get(i).getTrainingPlansList().get(j).getTypeOfTrainingPlan());
+                }
+                adapter3 = new MyListAdapter(this, aTitle, aDescription);
+
+                trainingPlansList = findViewById(R.id.LTest);
+                trainingPlansList.setAdapter(adapter3);
+            } else {
+                dontHaveTrainingPlansTV.setVisibility(View.VISIBLE);
+            }
+        }
+    }
+
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
-        getMenuInflater().inflate(R.menu.main_menu,menu);
+        getMenuInflater().inflate(R.menu.main_menu, menu);
 
-        for(int i=0;i<menu.size();i++)
-        {
-            MenuItem item= menu.getItem(i);
+        for (int i = 0; i < menu.size(); i++) {
+            MenuItem item = menu.getItem(i);
             item.setShowAsActionFlags(MenuItem.SHOW_AS_ACTION_ALWAYS);
         }
         MenuItem item;
@@ -138,22 +134,19 @@ public class TrainingPlansListActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
+    public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
 
         if (id == R.id.action_login) {
-            Intent intent=new Intent(this,LoginPage.class);
+            Intent intent = new Intent(this, LoginPage.class);
             startActivityForResult(intent, 0);
             //Toast.makeText(this,"you selected login",Toast.LENGTH_LONG).show();
             return true;
-        }
-        else if (id == R.id.action_register) {
+        } else if (id == R.id.action_register) {
             Intent intent = new Intent(this, SignUp.class);
             startActivityForResult(intent, 0);
             return true;
-        }
-        else if (id == R.id.action_exit){
+        } else if (id == R.id.action_exit) {
             builder.setMessage("Do you want to logout?")
                     .setCancelable(false)
                     .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
@@ -162,7 +155,7 @@ public class TrainingPlansListActivity extends AppCompatActivity {
                             sharedPref.SetUsername("YouRGuest");
                             Toast.makeText(getApplicationContext(), "You logged out",
                                     Toast.LENGTH_SHORT).show();
-                            restartapp();
+                            restartAppToHomePage();
                         }
                     })
                     .setNegativeButton("No", new DialogInterface.OnClickListener() {
@@ -176,8 +169,7 @@ public class TrainingPlansListActivity extends AppCompatActivity {
             AlertDialog alert = builder.create();
             alert.setTitle("Logout");
             alert.show();
-        }
-        else if (id == R.id.action_GoHome) {
+        } else if (id == R.id.action_GoHome) {
             finish();
             return true;
         }
@@ -195,6 +187,13 @@ public class TrainingPlansListActivity extends AppCompatActivity {
     void restartapp() {
         Intent i = new Intent(getApplicationContext(), TrainingPlansListActivity.class);
         i.putExtra("WE", getIntent().getIntExtra("WE", 0));
+        startActivity(i);
+        finish();
+    }
+
+    void restartAppToHomePage(){
+        Intent i = new Intent(getApplicationContext(), MainActivity.class);
+     //   i.putExtra("WE", getIntent().getIntExtra("WE", 0));
         startActivity(i);
         finish();
     }

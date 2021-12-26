@@ -41,8 +41,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         adminsLayout = findViewById(R.id.adminsLayout);
 
         sharedPref.UpdateAdmin();
-        if (!sharedPref.isAdmin())
-        {
+        if (!sharedPref.isAdmin()) {
             adminsLayout.setVisibility(View.GONE);
         }
 
@@ -94,15 +93,32 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     startActivity(mapIntent);
                 }
             }
-        } else if (view == toUsersList)
-        {
+        } else if (view == toUsersList) {
             Intent intent = new Intent(this, UsersListActivity.class);
             startActivityForResult(intent, 0);
-        }
-        else if (view == toTrainingPlans)
-        {
-            Intent intent = new Intent(this, TrainingPlansListActivity.class);
-            startActivityForResult(intent, 0);
+        } else if (view == toTrainingPlans) {
+            if (sharedPref.GetUsername().equals("YouRGuest")) {
+                builder.setMessage("This page is only for users")
+                        .setCancelable(false)
+                        .setPositiveButton("Login", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                Intent intent = new Intent(MainActivity.this, LoginPage.class);
+                                startActivityForResult(intent, 0);
+                            }
+                        })
+                        .setNegativeButton("back", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                //  Action for 'NO' Button
+                                dialog.cancel();
+                            }
+                        });
+                AlertDialog alert = builder.create();
+                alert.setTitle("Training Plans");
+                alert.show();
+            } else {
+                Intent intent = new Intent(this, TrainingPlansListActivity.class);
+                startActivityForResult(intent, 0);
+            }
         }
 
     }

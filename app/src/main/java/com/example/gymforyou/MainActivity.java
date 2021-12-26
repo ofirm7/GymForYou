@@ -17,7 +17,7 @@ import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    Button toExercises, toGyms, toUsersList;
+    Button toExercises, toGyms, toUsersList, toTrainingPlans;
     SharedPref sharedPref;
     AlertDialog.Builder builder;
 
@@ -32,6 +32,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         toGyms = findViewById(R.id.toGyms);
         toExercises = findViewById(R.id.toExercises);
+        toTrainingPlans = findViewById(R.id.toTrainingPlans);
 
         builder = new AlertDialog.Builder(this);
 
@@ -45,6 +46,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             adminsLayout.setVisibility(View.GONE);
         }
 
+        toTrainingPlans.setOnClickListener(this);
         toUsersList.setOnClickListener(this);
         toGyms.setOnClickListener(this);
         toExercises.setOnClickListener(this);
@@ -95,6 +97,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         } else if (view == toUsersList)
         {
             Intent intent = new Intent(this, UsersListActivity.class);
+            startActivityForResult(intent, 0);
+        }
+        else if (view == toTrainingPlans)
+        {
+            Intent intent = new Intent(this, TrainingPlansListActivity.class);
             startActivityForResult(intent, 0);
         }
 

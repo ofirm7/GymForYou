@@ -109,7 +109,7 @@ public class UsersListActivity extends AppCompatActivity implements AdapterView.
                     else {
                         //saving as admin
                         DataModel.admins.add(new Admin(DataModel.users.get(userPos).username, DataModel.users.get(userPos).password,
-                                DataModel.users.get(userPos).email, DataModel.users.get(userPos).phoneNumber, adminLevel));
+                                DataModel.users.get(userPos).email, DataModel.users.get(userPos).phoneNumber,null, adminLevel));
                         DataModel.adminsSave();
 
                         //remove the new admin from users list

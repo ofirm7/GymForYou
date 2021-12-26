@@ -91,7 +91,7 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
 
                 //DataModel.users.add(new User(username.toString(), pass.toString()));
                 DataModel.users.add(new User(username.getText().toString(), pass.getText().toString(), email.getText().toString(),
-                        phoneNumber.getText().toString()));
+                        phoneNumber.getText().toString(), null));
                 DataModel.userSave();
                 sharedPref.SetUsername(username.getText().toString());
                 finish();

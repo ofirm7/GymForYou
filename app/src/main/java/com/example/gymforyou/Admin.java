@@ -1,11 +1,17 @@
 package com.example.gymforyou;
 
+import java.util.ArrayList;
+
 public class Admin extends User {
 
     private int adminLevel;
 
-    public Admin(String username, String password, String email, String phoneNumber, int adminLevel) {
-        super(username, password, email, phoneNumber);
+    public Admin(String username, String password, String email, String phoneNumber, ArrayList<TrainingPlan> trainingPlansList, int adminLevel) {
+        super(username, password, email, phoneNumber, trainingPlansList);
+        this.adminLevel = adminLevel;
+    }
+
+    public Admin(int adminLevel) {
         this.adminLevel = adminLevel;
     }
 

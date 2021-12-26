@@ -38,7 +38,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         toUsersList = findViewById(R.id.toUsersList);
 
         adminsLayout = findViewById(R.id.adminsLayout);
-        //adminsLayout.setVisibility(View.GONE);
+
+        sharedPref.UpdateAdmin();
+        if (!sharedPref.isAdmin())
+        {
+            adminsLayout.setVisibility(View.GONE);
+        }
 
         toUsersList.setOnClickListener(this);
         toGyms.setOnClickListener(this);

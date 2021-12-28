@@ -12,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -19,18 +20,27 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.Locale;
 
-public class TrainingPlansListActivity extends AppCompatActivity {
+public class TrainingPlansListActivity extends AppCompatActivity implements View.OnClickListener {
 
     SharedPref sharedPref;
     AlertDialog.Builder builder;
-    Dialog addDialog;
-    Button openAddDialog, addTrainingPlan;
     TextView dontHaveTrainingPlansTV;
+
+    //var that says if the user is admin or just a user
+    Boolean isAdminVar;
+
+    //checking the position of the user or admin (makeListFunc find it and put the right value)
+    int i;
 
     //for the list
     ListView trainingPlansList;
     MyListAdapter adapter3;
     ArrayList<String> aTitle = new ArrayList<>(), aDescription = new ArrayList<>();
+
+    //for the addDialog
+    Dialog addDialog;
+    Button openAddDialog, addTrainingPlan;
+    EditText nameOfTrainingPlan, typeOfTrainingPlan;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,18 +51,70 @@ public class TrainingPlansListActivity extends AppCompatActivity {
         dontHaveTrainingPlansTV = findViewById(R.id.dontHaveTrainingPlansTV);
         dontHaveTrainingPlansTV.setVisibility(View.GONE);
 
+        Boolean isAdminVar = sharedPref.isAdmin();
         makeListFunc();
 
         openAddDialog = findViewById(R.id.openAddDialog);
 
         builder = new AlertDialog.Builder(this);
 
+        openAddDialog.setOnClickListener(this);
+
+    }
+
+    @Override
+    public void onClick(View view) {
+
+        if (view == openAddDialog) {
+
+        }
+    }
+
+    public void OpenAddTrainingPlanDialog() {
+        addDialog = new Dialog(this);
+        addDialog.setContentView(R.layout.custom_dialog_add_training_plan);
+        addDialog.setTitle("Name Of Training Plan");
+
+        addDialog.setCancelable(true);
+
+        typeOfTrainingPlan = addDialog.findViewById(R.id.typeOfTrainingPlan);
+        nameOfTrainingPlan = addDialog.findViewById(R.id.nameOfTrainingPlan);
+        addTrainingPlan = addDialog.findViewById(R.id.addTrainingPlan);
+
+        addTrainingPlan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (v == addTrainingPlan) {
+                    if (isAdminVar) {
+
+                        if (DataModel.admins.get(i).getTrainingPlansList() != null) {
+                            DataModel.admins.get(i).getTrainingPlansList().add(
+                                    new TrainingPlan(nameOfTrainingPlan.getText().toString(), DataModel.admins.get(i).getUsername(),
+                                            null, typeOfTrainingPlan.getText().toString()));
+                        }
+                        else{
+                            /*
+                            DataModel.admins.get(i).setTrainingPlansList(new ArrayList<TrainingPlan>() =
+                            {new TrainingPlan(nameOfTrainingPlan.getText().toString(), DataModel.admins.get(i).getUsername(),
+                                    null, typeOfTrainingPlan.getText().toString())});*/
+                        }
+
+                        DataModel.adminsSave();
+                        addDialog.dismiss();
+                    } else {
+                        DataModel.userSave();
+                        addDialog.dismiss();
+                        restartapp();
+                    }
+
+                }
+            }
+        });
+
+        addDialog.show();
     }
 
     public void makeListFunc() {
-        Boolean isAdminVar = sharedPref.isAdmin();
-        //checking the position of the user
-        int i;
         boolean stopLoop = false;
         //checking if user
         if (isAdminVar) {
@@ -191,9 +253,9 @@ public class TrainingPlansListActivity extends AppCompatActivity {
         finish();
     }
 
-    void restartAppToHomePage(){
+    void restartAppToHomePage() {
         Intent i = new Intent(getApplicationContext(), MainActivity.class);
-     //   i.putExtra("WE", getIntent().getIntExtra("WE", 0));
+        //   i.putExtra("WE", getIntent().getIntExtra("WE", 0));
         startActivity(i);
         finish();
     }

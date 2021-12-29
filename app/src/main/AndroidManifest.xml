@@ -9,7 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.GymForYou">
-        <activity android:name=".TrainingPlansListActivity"></activity>
+        <activity android:name=".TrainingPlanPageActivity"></activity>
+        <activity android:name=".TrainingPlansListActivity" />
         <activity android:name=".UsersListActivity" />
         <activity android:name=".ExerciseActivity" />
         <activity android:name=".MusclesListActivity" />

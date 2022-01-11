@@ -4,6 +4,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
+import android.content.BroadcastReceiver;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -22,6 +23,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     AlertDialog.Builder builder;
 
     LinearLayout adminsLayout;
+    BroadcastReceiver BRNetwork;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +31,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         sharedPref = new SharedPref(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        BRNetwork = new NetworkChangeReceiver();
 
         toGyms = findViewById(R.id.toGyms);
         toExercises = findViewById(R.id.toExercises);

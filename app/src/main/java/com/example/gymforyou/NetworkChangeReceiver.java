@@ -5,9 +5,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.IInterface;
 import android.util.Log;
 
 public class NetworkChangeReceiver extends BroadcastReceiver {
+
+    public static boolean isOnlineFlag = true;
 
     @Override
     public void onReceive(final Context context, final Intent intent) {
@@ -22,11 +25,17 @@ public class NetworkChangeReceiver extends BroadcastReceiver {
 
         if (isOnline(context)) {
             // Do something
-
+            isOnlineFlag = true;
             Log.d("Network Available ", "Flag No 1");
+
         }
         else {
+            isOnlineFlag = false;
             Log.d("Network Available ", "Flag No 2");
+            Intent i = new Intent(context, BroadcastAlert.class);
+            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(i);
+
         }
     }
 

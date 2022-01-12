@@ -11,6 +11,7 @@
         android:theme="@style/Theme.GymForYou">
         <activity android:name=".TrainingPlanPageActivity"></activity>
         <activity android:name=".TrainingPlansListActivity" />
+        <activity android:name=".BroadcastAlert"/>
         <activity android:name=".UsersListActivity" />
         <activity android:name=".ExerciseActivity" />
         <activity android:name=".MusclesListActivity" />

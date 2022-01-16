@@ -98,6 +98,15 @@
                 android:gravity="center"
                 android:text="Delete video" />
 
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="D"
+                android:id="@+id/downloadVideo"
+                />
+
         </LinearLayout>
 
         <TextView

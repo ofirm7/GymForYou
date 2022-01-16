@@ -6,12 +6,15 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.DownloadManager;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -35,7 +38,14 @@ import com.google.firebase.storage.UploadTask;
 
 import java.util.HashMap;
 
+import static android.os.Environment.DIRECTORY_DOWNLOADS;
+
 public class ExerciseActivity extends AppCompatActivity implements View.OnClickListener {
+
+    Button downloadVideo;
+    FirebaseStorage firebaseStorage;
+    StorageReference storageReference;
+    StorageReference storageReference2;
 
     SharedPref sharedPref;
     TextView nameOfExerciseTv, exerciseCreatorTv, exerciseDescriptionTv, exerciseDetailsTv;
@@ -137,6 +147,11 @@ public class ExerciseActivity extends AppCompatActivity implements View.OnClickL
             editDetails.setOnClickListener(this);
         }
 
+        //Download video
+        downloadVideo = findViewById(R.id.downloadVideo);
+        downloadVideo.setOnClickListener(this);
+        //
+
         submitDetails.setOnClickListener(this);
         changeOrAddVideo.setOnClickListener(this);
         deleteVideo.setOnClickListener(this);
@@ -200,7 +215,50 @@ public class ExerciseActivity extends AppCompatActivity implements View.OnClickL
             alert.setTitle("Delete Video");
             alert.show();
         }
+        else if (view == downloadVideo)
+        {
+            downloadVideoFunc();
+        }
     }
+
+    public void downloadVideoFunc()
+    {
+        storageReference = firebaseStorage.getInstance().getReference("Files");
+        String videoName = DataModel.muscles.get(getIntent().getIntExtra("WESEC", 0))
+                .getExercisesList().get(getIntent().getIntExtra("ELTOE", 0)).getUrl().split("%2F")[1].split("alt")[0];
+        videoName = videoName.substring(0, videoName.length()-1);
+        storageReference2 = storageReference.child(videoName);
+
+        String finalVideoName = videoName;
+        storageReference2.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+            @Override
+            public void onSuccess(Uri uri) {
+                String url = uri.toString();
+                String name = finalVideoName.substring(0,finalVideoName.length()-4);
+                downloadVideoInternalFunc(ExerciseActivity.this , name, ".mp4", DIRECTORY_DOWNLOADS, url);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.e("Error",e.getMessage());
+            }
+        });
+    }
+
+    public void downloadVideoInternalFunc(Context context, String fileName,
+                                          String fileExtension, String destinationDirectory,
+                                          String url)
+    {
+        DownloadManager downloadManager = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
+        Uri uri =Uri.parse(url);
+        DownloadManager.Request request = new DownloadManager.Request(uri);
+
+        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+        request.setDestinationInExternalFilesDir(context, destinationDirectory, fileName + fileExtension);
+
+        downloadManager.enqueue(request);
+    }
+
 
     // choose a video from phone storage
     private void chooseVideo() {

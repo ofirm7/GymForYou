@@ -9,7 +9,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        tools:context=".ExerciseActivity">
+        tools:context=".ExerciseActivity"
+        >
 
         <TextView
             android:id="@+id/nameOfExerciseTv"
@@ -88,7 +89,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:text="Add video" />
+                android:text="Add"
+                />
 
             <Button
                 android:id="@+id/deleteVideo"
@@ -96,15 +98,23 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:gravity="center"
-                android:text="Delete video" />
+                android:text="Delete"
+                android:layout_marginLeft="5dp"/>
 
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:text="D"
+            <ImageButton
+                android:layout_width="45dp"
+                android:layout_height="45dp"
                 android:id="@+id/downloadVideo"
+                android:background="@drawable/downloadimageicon"
+                android:layout_gravity="right"
+                />
+
+            <ImageView
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:id="@+id/afterDownloadImage"
+                android:background="@android:drawable/checkbox_on_background"
+                android:layout_gravity="right"
                 />
 
         </LinearLayout>

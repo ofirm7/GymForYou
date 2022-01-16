@@ -21,6 +21,8 @@ import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.MediaController;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -42,7 +44,8 @@ import static android.os.Environment.DIRECTORY_DOWNLOADS;
 
 public class ExerciseActivity extends AppCompatActivity implements View.OnClickListener {
 
-    Button downloadVideo;
+    ImageButton downloadVideo;
+    ImageView afterDownload;
     FirebaseStorage firebaseStorage;
     StorageReference storageReference;
     StorageReference storageReference2;
@@ -150,6 +153,9 @@ public class ExerciseActivity extends AppCompatActivity implements View.OnClickL
         //Download video
         downloadVideo = findViewById(R.id.downloadVideo);
         downloadVideo.setOnClickListener(this);
+
+        afterDownload = findViewById(R.id.afterDownloadImage);
+        afterDownload.setVisibility(View.GONE);
         //
 
         submitDetails.setOnClickListener(this);
@@ -236,6 +242,8 @@ public class ExerciseActivity extends AppCompatActivity implements View.OnClickL
                 String url = uri.toString();
                 String name = finalVideoName.substring(0,finalVideoName.length()-4);
                 downloadVideoInternalFunc(ExerciseActivity.this , name, ".mp4", DIRECTORY_DOWNLOADS, url);
+                downloadVideo.setVisibility(View.GONE);
+                afterDownload.setVisibility(View.VISIBLE);
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override

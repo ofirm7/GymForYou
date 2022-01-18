@@ -44,8 +44,8 @@ import static android.os.Environment.DIRECTORY_DOWNLOADS;
 
 public class ExerciseActivity extends AppCompatActivity implements View.OnClickListener {
 
-    ImageButton downloadVideo;
-    ImageView afterDownload;
+    ImageButton downloadVideoIB;
+    ImageView afterDownloadIV;
     FirebaseStorage firebaseStorage;
     StorageReference storageReference;
     StorageReference storageReference2;
@@ -84,6 +84,10 @@ public class ExerciseActivity extends AppCompatActivity implements View.OnClickL
         exerciseDescriptionTv = findViewById(R.id.exerciseDescriptionTv);
         exerciseDescriptionTv.setText(" " + DataModel.muscles.get(getIntent().getIntExtra("WESEC", 0))
                 .getExercisesList().get(getIntent().getIntExtra("ELTOE", 0)).getDescriptionOfExercise() + " ");
+        if (exerciseDescriptionTv.getText().toString().length() <=3)
+        {
+            exerciseDescriptionTv.setVisibility(View.GONE);
+        }
 
         exerciseDetailsTv = findViewById(R.id.exerciseDetailsTv);
         exerciseDetailsEt = findViewById(R.id.exerciseDetailsEt);
@@ -151,11 +155,15 @@ public class ExerciseActivity extends AppCompatActivity implements View.OnClickL
         }
 
         //Download video
-        downloadVideo = findViewById(R.id.downloadVideo);
-        downloadVideo.setOnClickListener(this);
+        downloadVideoIB = findViewById(R.id.downloadVideo);
+        downloadVideoIB.setOnClickListener(this);
+        if (url == null)
+        {
+            downloadVideoIB.setVisibility(View.GONE);
+        }
 
-        afterDownload = findViewById(R.id.afterDownloadImage);
-        afterDownload.setVisibility(View.GONE);
+        afterDownloadIV = findViewById(R.id.afterDownloadImage);
+        afterDownloadIV.setVisibility(View.GONE);
         //
 
         submitDetails.setOnClickListener(this);
@@ -221,7 +229,7 @@ public class ExerciseActivity extends AppCompatActivity implements View.OnClickL
             alert.setTitle("Delete Video");
             alert.show();
         }
-        else if (view == downloadVideo)
+        else if (view == downloadVideoIB)
         {
             downloadVideoFunc();
         }
@@ -242,8 +250,8 @@ public class ExerciseActivity extends AppCompatActivity implements View.OnClickL
                 String url = uri.toString();
                 String name = finalVideoName.substring(0,finalVideoName.length()-4);
                 downloadVideoInternalFunc(ExerciseActivity.this , name, ".mp4", DIRECTORY_DOWNLOADS, url);
-                downloadVideo.setVisibility(View.GONE);
-                afterDownload.setVisibility(View.VISIBLE);
+                downloadVideoIB.setVisibility(View.GONE);
+                afterDownloadIV.setVisibility(View.VISIBLE);
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override

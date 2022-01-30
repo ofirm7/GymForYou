@@ -152,7 +152,8 @@ public class MusclesListActivity extends AppCompatActivity implements AdapterVie
             item.setVisible(false);
 
             item = menu.getItem(0);
-            item.setTitle(sharedPref.GetUsername());
+            //item.setTitle(sharedPref.GetUsername());
+            item.setTitle(MainActivity.usernameFromInternalFileString);
         }
         return true;
     }

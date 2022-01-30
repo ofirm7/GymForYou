@@ -16,6 +16,10 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     Button toExercises, toGyms, toUsersList, toTrainingPlans;
@@ -25,6 +29,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     LinearLayout adminsLayout;
     BroadcastReceiver BRNetwork;
 
+    InputStream in;
+    //Global var for username menu item in other pages
+    public static String usernameFromInternalFileString;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -32,6 +40,26 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         BRNetwork = new NetworkChangeReceiver();
+
+        try {
+            in=openFileInput("userNameInternalFile");
+            byte[]buffer=new byte[4096];
+            try {
+                in.read(buffer);
+                usernameFromInternalFileString = new String(buffer);
+                in.close();
+            }
+            catch (IOException e)
+            {
+                e.printStackTrace();
+            }
+
+        }
+        catch (FileNotFoundException e)
+        {
+            e.printStackTrace();
+        }
+
 
         toGyms = findViewById(R.id.toGyms);
         toExercises = findViewById(R.id.toExercises);
@@ -162,7 +190,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             item.setVisible(false);
 
             item = menu.getItem(0);
-            item.setTitle(sharedPref.GetUsername());
+            //item.setTitle(sharedPref.GetUsername());
+            item.setTitle(usernameFromInternalFileString);
         }
         return true;
     }

@@ -381,7 +381,8 @@ public class ExerciseActivity extends AppCompatActivity implements View.OnClickL
             item.setVisible(false);
 
             item = menu.getItem(0);
-            item.setTitle(sharedPref.GetUsername());
+            //item.setTitle(sharedPref.GetUsername());
+            item.setTitle(MainActivity.usernameFromInternalFileString);
         }
         return true;
     }

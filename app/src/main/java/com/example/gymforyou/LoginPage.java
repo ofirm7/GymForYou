@@ -12,11 +12,17 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
 public class LoginPage extends AppCompatActivity implements View.OnClickListener {
 
     Button submit;
     EditText usernameOrEmail, pass;
     SharedPref sharedPref;
+
+    FileOutputStream out;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +69,25 @@ public class LoginPage extends AppCompatActivity implements View.OnClickListener
                             || DataModel.users.get(temp).getPassword().equals(pass.getText().toString())
                             && DataModel.users.get(temp).getEmail().equals(usernameOrEmail.getText().toString())) {
                         sharedPref.SetUsername(DataModel.users.get(temp).getUsername());
+
+                        // Save to internal file
+                        try {
+                            out = openFileOutput("userNameInternalFile",MODE_PRIVATE);
+                        }
+                        catch (FileNotFoundException e) {
+                            e.printStackTrace();
+                        }
+
+                        try {
+                            out.write(DataModel.users.get(temp).getUsername().getBytes(),0,DataModel.users.get(temp).getUsername().length());
+                            out.close();
+                            Toast.makeText(this,"Your data saved to file",Toast.LENGTH_LONG).show();
+                        }
+                        catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        //
+
                         finish();
                     }
                 } else {
@@ -72,6 +97,25 @@ public class LoginPage extends AppCompatActivity implements View.OnClickListener
                             && DataModel.admins.get(temp).getEmail().equals(usernameOrEmail.getText().toString())) {
                         sharedPref.SetUsername(DataModel.admins.get(temp).getUsername());
                         sharedPref.UpdateAdmin();
+
+                        // Save to internal file
+                        try {
+                            out = openFileOutput("userNameInternalFile",MODE_PRIVATE);
+                        }
+                        catch (FileNotFoundException e) {
+                            e.printStackTrace();
+                        }
+
+                        try {
+                            out.write(DataModel.admins.get(temp).getUsername().getBytes(),0,DataModel.admins.get(temp).getUsername().length());
+                            out.close();
+                            Toast.makeText(this,"Your data saved to file",Toast.LENGTH_LONG).show();
+                        }
+                        catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        //
+
                         finish();
                     }
                 }

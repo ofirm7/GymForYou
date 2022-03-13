@@ -22,6 +22,10 @@ public class SharedPref {
         return user;
     }
 
+    public String GetPhoneNumber() {
+        return mySharedPrefrences.getString("phoneNumber", "YouRGuest");
+    }
+
     public void UpdateAdmin()
     {
         SharedPreferences.Editor editor = mySharedPrefrences.edit();

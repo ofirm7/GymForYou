@@ -18,7 +18,7 @@ import java.io.IOException;
 
 public class LoginPage extends AppCompatActivity implements View.OnClickListener {
 
-    Button submit;
+    Button submit, forgotPasswordBT;
     EditText usernameOrEmail, pass;
     SharedPref sharedPref;
 
@@ -31,9 +31,11 @@ public class LoginPage extends AppCompatActivity implements View.OnClickListener
 
         sharedPref = new SharedPref(this);
         submit = findViewById(R.id.submitLogin);
+        forgotPasswordBT = findViewById(R.id.forgotMyPasswordLogin);
         usernameOrEmail = findViewById(R.id.emailOrUsernameLogin);
         pass = findViewById(R.id.passwordLogin);
         submit.setOnClickListener(this);
+        forgotPasswordBT.setOnClickListener(this);
 
     }
 
@@ -120,6 +122,12 @@ public class LoginPage extends AppCompatActivity implements View.OnClickListener
                     }
                 }
             }
+        }
+        else if (view == forgotPasswordBT)
+        {
+            Intent i = new Intent(getApplicationContext(), ChangePasswordActivity.class);
+            startActivity(i);
+            finish();
         }
     }
 

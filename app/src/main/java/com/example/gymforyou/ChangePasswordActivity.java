@@ -17,11 +17,13 @@ import java.util.Random;
 public class ChangePasswordActivity extends AppCompatActivity implements View.OnClickListener {
 
     SharedPref sharedPref;
+    String phoneNumber = "";
+    String userName = "";
+
     int code = 0;
     Random random=new Random();
 
     Button sendCodeBT;
-    EditText etPhoneNumber;
     String[] permissions = {
 
             Manifest.permission.READ_SMS,
@@ -34,7 +36,10 @@ public class ChangePasswordActivity extends AppCompatActivity implements View.On
         setContentView(R.layout.activity_change_password);
         ActivityCompat.requestPermissions(this, permissions, 0);
         sendCodeBT = findViewById(R.id.sendCodeBT);
-        etPhoneNumber = findViewById(R.id.etPhoneNumber);
+
+        phoneNumber = getIntent().getStringExtra("CPI2");
+        userName = getIntent().getStringExtra("CPI");
+        sendCodeFunc();
 
         sendCodeBT.setOnClickListener(this);
     }
@@ -56,10 +61,9 @@ public class ChangePasswordActivity extends AppCompatActivity implements View.On
             code=random.nextInt(999999);
         }
         TelephonyManager telephony = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
-        String number = etPhoneNumber.getText().toString();
         SmsManager sms = SmsManager.getDefault();
         try {
-            sms.sendTextMessage(number, null, "(GymForYou) Your code:"+code, null, null);
+            sms.sendTextMessage(phoneNumber, null, "(GymForYou) Your code:"+code, null, null);
         } catch (Exception e) {
 
         }

@@ -74,18 +74,16 @@ public class LoginPage extends AppCompatActivity implements View.OnClickListener
 
                         // Save to internal file
                         try {
-                            out = openFileOutput("userNameInternalFile",MODE_PRIVATE);
-                        }
-                        catch (FileNotFoundException e) {
+                            out = openFileOutput("userNameInternalFile", MODE_PRIVATE);
+                        } catch (FileNotFoundException e) {
                             e.printStackTrace();
                         }
 
                         try {
-                            out.write(DataModel.users.get(temp).getUsername().getBytes(),0,DataModel.users.get(temp).getUsername().length());
+                            out.write(DataModel.users.get(temp).getUsername().getBytes(), 0, DataModel.users.get(temp).getUsername().length());
                             out.close();
-                            Toast.makeText(this,"Your data saved to file",Toast.LENGTH_LONG).show();
-                        }
-                        catch (IOException e) {
+                            Toast.makeText(this, "Your data saved to file", Toast.LENGTH_LONG).show();
+                        } catch (IOException e) {
                             e.printStackTrace();
                         }
                         //
@@ -102,18 +100,16 @@ public class LoginPage extends AppCompatActivity implements View.OnClickListener
 
                         // Save to internal file
                         try {
-                            out = openFileOutput("userNameInternalFile",MODE_PRIVATE);
-                        }
-                        catch (FileNotFoundException e) {
+                            out = openFileOutput("userNameInternalFile", MODE_PRIVATE);
+                        } catch (FileNotFoundException e) {
                             e.printStackTrace();
                         }
 
                         try {
-                            out.write(DataModel.admins.get(temp).getUsername().getBytes(),0,DataModel.admins.get(temp).getUsername().length());
+                            out.write(DataModel.admins.get(temp).getUsername().getBytes(), 0, DataModel.admins.get(temp).getUsername().length());
                             out.close();
-                            Toast.makeText(this,"Your data saved to file",Toast.LENGTH_LONG).show();
-                        }
-                        catch (IOException e) {
+                            Toast.makeText(this, "Your data saved to file", Toast.LENGTH_LONG).show();
+                        } catch (IOException e) {
                             e.printStackTrace();
                         }
                         //
@@ -123,11 +119,18 @@ public class LoginPage extends AppCompatActivity implements View.OnClickListener
                 }
             }
         }
-        else if (view == forgotPasswordBT)
-        {
-            Intent i = new Intent(getApplicationContext(), ChangePasswordActivity.class);
-            startActivity(i);
-            finish();
+        else if (view == forgotPasswordBT) {
+            if (usernameOrEmail.getText().toString().equals("")) {
+                Toast.makeText(this, "fill your username ", Toast.LENGTH_SHORT).show();
+            } else if (isUserExist()) {
+                Intent i = new Intent(getApplicationContext(), ChangePasswordActivity.class);
+                i.putExtra("CPI", usernameOrEmail.getText().toString());
+                i.putExtra("CPI2", getPhoneNumber());
+                startActivity(i);
+                finish();
+            } else {
+                Toast.makeText(this, "No account with that username / email", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
@@ -193,6 +196,51 @@ public class LoginPage extends AppCompatActivity implements View.OnClickListener
         Intent i = new Intent(getApplicationContext(), MainActivity.class);
         startActivity(i);
         finish();
+    }
+
+    public boolean isUserExist() {
+        boolean flag = false;
+        for (int i = 0; i < DataModel.users.size() && !flag; i++) {
+            if (DataModel.users.get(i).getUsername().equals(usernameOrEmail.getText().toString())
+                    || DataModel.users.get(i).getEmail().equals(usernameOrEmail.getText().toString())) {
+                flag = true;
+            }
+        }
+        for (int j = 0; j < DataModel.admins.size() && !flag; j++) {
+            if (DataModel.admins.get(j).getUsername().equals(usernameOrEmail.getText().toString())
+                    || DataModel.admins.get(j).getEmail().equals(usernameOrEmail.getText().toString())) {
+                flag = true;
+            }
+        }
+        return flag;
+    }
+
+    public String getPhoneNumber()
+    {
+        boolean flag = false;
+        boolean isAdmin = false;
+        int temp = 0;
+        for (int i = 0; i < DataModel.users.size() && !flag; i++) {
+            if (DataModel.users.get(i).getUsername().equals(usernameOrEmail.getText().toString())
+                    || DataModel.users.get(i).getEmail().equals(usernameOrEmail.getText().toString())) {
+                flag = true;
+                temp = i;
+            }
+        }
+        for (int j = 0; j < DataModel.admins.size() && !flag; j++) {
+            if (DataModel.admins.get(j).getUsername().equals(usernameOrEmail.getText().toString())
+                    || DataModel.admins.get(j).getEmail().equals(usernameOrEmail.getText().toString())) {
+                flag = true;
+                temp = j;
+                isAdmin = true;
+            }
+        }
+
+        if (!isAdmin) {
+            return DataModel.users.get(temp).getPhoneNumber();
+        } else {
+            return DataModel.admins.get(temp).getPhoneNumber();
+        }
     }
 
     void restartapp() {

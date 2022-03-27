@@ -16,14 +16,16 @@ import java.util.Random;
 
 public class ChangePasswordActivity extends AppCompatActivity implements View.OnClickListener {
 
+    Boolean isAdmin = false;
+
     SharedPref sharedPref;
     String phoneNumber = "";
-    String userName = "";
+    String userNameOrEmail = "";
+
+    EditText newPasswordET, codeET;
 
     int code = 0;
-    Random random=new Random();
-
-    Button sendCodeBT;
+    Button sendCodeBT, submitBT;
     String[] permissions = {
 
             Manifest.permission.READ_SMS,
@@ -38,10 +40,15 @@ public class ChangePasswordActivity extends AppCompatActivity implements View.On
         sendCodeBT = findViewById(R.id.sendCodeBT);
 
         phoneNumber = getIntent().getStringExtra("CPI2");
-        userName = getIntent().getStringExtra("CPI");
+        userNameOrEmail = getIntent().getStringExtra("CPI");
         sendCodeFunc();
 
+        newPasswordET = findViewById(R.id.newPasswordET);
+        codeET = findViewById(R.id.codeET);
+        submitBT = findViewById(R.id.submitBT);
+
         sendCodeBT.setOnClickListener(this);
+        submitBT.setOnClickListener(this);
     }
 
     @Override
@@ -50,6 +57,44 @@ public class ChangePasswordActivity extends AppCompatActivity implements View.On
         {
             sendCodeFunc();
         }
+        else if (view == submitBT)
+        {
+            if (newPasswordET.getText().toString() != "")
+            {
+                int pos = findPosOfUser();
+                if (!isAdmin)
+                {
+                    DataModel.users.get(pos).setPassword(newPasswordET.getText().toString());
+                    DataModel.userSave();
+                }
+                else
+                {
+                    DataModel.admins .get(pos).setPassword(newPasswordET.getText().toString());
+                    DataModel.adminsSave();
+                }
+            }
+        }
+    }
+
+    public int findPosOfUser() {
+        boolean flag = false;
+        int pos = 0;
+        for (int i = 0; i < DataModel.users.size() && !flag; i++) {
+            if (DataModel.users.get(i).getUsername().equals(userNameOrEmail)
+                    || DataModel.users.get(i).getEmail().equals(userNameOrEmail)){
+                flag = true;
+                pos = i;
+            }
+        }
+        for (int j = 0; j < DataModel.admins.size() && !flag; j++) {
+            if (DataModel.admins.get(j).getUsername().equals(userNameOrEmail)
+                    || DataModel.admins.get(j).getEmail().equals(userNameOrEmail)) {
+                flag = true;
+                pos = j;
+                isAdmin = true;
+            }
+        }
+        return pos;
     }
 
     public void sendCodeFunc()

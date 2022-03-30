@@ -52,6 +52,8 @@ public class TrainingPlansListActivity extends AppCompatActivity implements View
         dontHaveTrainingPlansTV = findViewById(R.id.dontHaveTrainingPlansTV);
         dontHaveTrainingPlansTV.setVisibility(View.GONE);
 
+        trainingPlansList = findViewById(R.id.LTrainingsPlans);
+
         isAdminVar = sharedPref.isAdmin();
         makeListFunc();
 
@@ -131,7 +133,6 @@ public class TrainingPlansListActivity extends AppCompatActivity implements View
         if (isAdminVar) {
             for (i = 0; i < DataModel.admins.size(); i++) {
                 if (sharedPref.GetUsername().equals(DataModel.admins.get(i).getUsername())) {
-                    stopLoop = true;
                     break;
                 }
             }
@@ -149,7 +150,8 @@ public class TrainingPlansListActivity extends AppCompatActivity implements View
             }
         } else {
             for (i = 0; i < DataModel.users.size() && !stopLoop; i++) {
-                if (DataModel.users.get(i).getUsername() == sharedPref.GetUsername()) {
+                String s=DataModel.users.get(i).getUsername();
+                if (DataModel.users.get(i).getUsername().equals(sharedPref.GetUsername())) {
                     stopLoop = true;
                 }
             }

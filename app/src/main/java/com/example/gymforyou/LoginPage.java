@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.method.HideReturnsTransformationMethod;
+import android.text.method.PasswordTransformationMethod;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -12,13 +14,15 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import org.w3c.dom.Text;
+
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
 public class LoginPage extends AppCompatActivity implements View.OnClickListener {
 
-    Button submit, forgotPasswordBT;
+    Button submit, forgotPasswordBT, showHideBtn;
     EditText usernameOrEmail, pass;
     SharedPref sharedPref;
 
@@ -34,9 +38,12 @@ public class LoginPage extends AppCompatActivity implements View.OnClickListener
         forgotPasswordBT = findViewById(R.id.forgotMyPasswordLogin);
         usernameOrEmail = findViewById(R.id.emailOrUsernameLogin);
         pass = findViewById(R.id.passwordLogin);
+
+        showHideBtn = findViewById(R.id.showHideBtn);
+
+        showHideBtn.setOnClickListener(this);
         submit.setOnClickListener(this);
         forgotPasswordBT.setOnClickListener(this);
-
     }
 
     @Override
@@ -118,8 +125,7 @@ public class LoginPage extends AppCompatActivity implements View.OnClickListener
                     }
                 }
             }
-        }
-        else if (view == forgotPasswordBT) {
+        } else if (view == forgotPasswordBT) {
             if (usernameOrEmail.getText().toString().equals("")) {
                 Toast.makeText(this, "fill your username ", Toast.LENGTH_SHORT).show();
             } else if (isUserExist()) {
@@ -130,6 +136,14 @@ public class LoginPage extends AppCompatActivity implements View.OnClickListener
                 finish();
             } else {
                 Toast.makeText(this, "No account with that username / email", Toast.LENGTH_SHORT).show();
+            }
+        } else if (view == showHideBtn) {
+            if (showHideBtn.getText().toString() == "Show") {
+                pass.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+                showHideBtn.setText("Hide");
+            } else {
+                pass.setTransformationMethod(PasswordTransformationMethod.getInstance());
+                showHideBtn.setText("Show");
             }
         }
     }
@@ -215,8 +229,7 @@ public class LoginPage extends AppCompatActivity implements View.OnClickListener
         return flag;
     }
 
-    public String getPhoneNumber()
-    {
+    public String getPhoneNumber() {
         boolean flag = false;
         boolean isAdmin = false;
         int temp = 0;

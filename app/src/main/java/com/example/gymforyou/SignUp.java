@@ -13,6 +13,9 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -21,6 +24,8 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
     Button submit, toLoginFromSignUp;
     EditText email, username, pass, passConfirmation, phoneNumber;
     SharedPref sharedPref;
+    FileOutputStream out;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,23 +60,31 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
                 return;
             } else if (pass.getText().toString().length() < 6 || pass.getText().toString().length() > 18 ||
                     pass.getText().toString().contains(" ")) {
-                Toast.makeText(this, "passwords cannot contain space", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "passwords isn't valid", Toast.LENGTH_SHORT).show();
                 return;
             } else {
 
                 boolean flagU = false;
                 boolean flagE = false;
                 boolean flagP = false;
-                int tempU = 0;
                 for (int i = 0; i < DataModel.users.size() && !flagU && !flagE; i++) {
                     if (DataModel.users.get(i).getUsername().equals(username.getText().toString())) {
                         flagU = true;
-                        tempU = i;
                     }
                     if (DataModel.users.get(i).getEmail().equals(email.getText().toString())) {
                         flagE = true;
                     }
                     if (DataModel.users.get(i).getPhoneNumber().equals(phoneNumber.getText().toString()))
+                        flagP = true;
+                }
+                for (int j = 0; j < DataModel.admins.size() && !flagU && !flagE; j++) {
+                    if (DataModel.admins.get(j).getUsername().equals(username.getText().toString())) {
+                        flagU = true;
+                    }
+                    if (DataModel.admins.get(j).getEmail().equals(email.getText().toString())) {
+                        flagE = true;
+                    }
+                    if (DataModel.admins.get(j).getPhoneNumber().equals(phoneNumber.getText().toString()))
                         flagP = true;
                 }
 
@@ -94,6 +107,19 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
                         phoneNumber.getText().toString(), null));
                 DataModel.userSave();
                 sharedPref.SetUsername(username.getText().toString());
+                try {
+                    out = openFileOutput("userNameInternalFile", MODE_PRIVATE);
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+
+                try {
+                    out.write(username.getText().toString().getBytes(), 0, username.getText().toString().length());
+                    out.close();
+                    Toast.makeText(this, "Your data saved to file", Toast.LENGTH_LONG).show();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
                 finish();
             }
         } else if (view == toLoginFromSignUp) {

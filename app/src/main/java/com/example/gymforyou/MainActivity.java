@@ -128,6 +128,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Intent intent = new Intent(this, UsersListActivity.class);
             startActivityForResult(intent, 0);
         } else if (view == toTrainingPlans) {
+
+
             if (sharedPref.GetUsername().equals("YouRGuest")) {
                 builder.setMessage("This page is only for users")
                         .setCancelable(false)

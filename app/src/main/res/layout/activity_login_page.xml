@@ -28,15 +28,33 @@
         android:layout_marginTop="7dp"
         />
 
-    <EditText
-        android:id="@+id/passwordLogin"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:hint="Password"
-        android:textSize="30dp"
+        android:orientation="horizontal"
         android:layout_gravity="center"
         android:layout_marginTop="7dp"
-        />
+        >
+
+        <EditText
+            android:id="@+id/passwordLogin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="Password"
+            android:inputType="textPassword"
+            android:textSize="30dp"
+            android:layout_gravity="center"
+            />
+        <Button
+            android:id="@+id/showHideBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:textSize="20dp"
+            android:layout_marginLeft="10dp"
+            android:text="Show"
+            />
+
+    </LinearLayout>
 
     <Button
         android:id="@+id/submitLogin"

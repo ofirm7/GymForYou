@@ -14,13 +14,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import org.w3c.dom.Text;
-
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-public class LoginPage extends AppCompatActivity implements View.OnClickListener {
+public class LoginPageActivity extends AppCompatActivity implements View.OnClickListener {
 
     Button submit, forgotPasswordBT, showHideBtn;
     EditText usernameOrEmail, pass;
@@ -184,12 +182,12 @@ public class LoginPage extends AppCompatActivity implements View.OnClickListener
         int id = item.getItemId();
 
         if (id == R.id.action_login) {
-            Intent intent = new Intent(this, LoginPage.class);
+            Intent intent = new Intent(this, LoginPageActivity.class);
             startActivityForResult(intent, 0);
             //Toast.makeText(this,"you selected login",Toast.LENGTH_LONG).show();
             return true;
         } else if (id == R.id.action_register) {
-            Intent intent = new Intent(this, SignUp.class);
+            Intent intent = new Intent(this, SignUpActivity.class);
             startActivityForResult(intent, 0);
             return true;
         } else if (id == R.id.action_exit) {

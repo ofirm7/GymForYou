@@ -392,12 +392,12 @@ public class ExerciseActivity extends AppCompatActivity implements View.OnClickL
         int id = item.getItemId();
 
         if (id == R.id.action_login) {
-            Intent intent = new Intent(this, LoginPage.class);
+            Intent intent = new Intent(this, LoginPageActivity.class);
             startActivityForResult(intent, 0);
             //Toast.makeText(this,"you selected login",Toast.LENGTH_LONG).show();
             return true;
         } else if (id == R.id.action_register) {
-            Intent intent = new Intent(this, SignUp.class);
+            Intent intent = new Intent(this, SignUpActivity.class);
             startActivityForResult(intent, 0);
             return true;
         } else if (id == R.id.action_exit) {

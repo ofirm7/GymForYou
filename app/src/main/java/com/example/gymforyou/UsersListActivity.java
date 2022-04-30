@@ -13,10 +13,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -193,13 +191,13 @@ public class UsersListActivity extends AppCompatActivity implements AdapterView.
         int id = item.getItemId();
 
         if (id == R.id.action_login) {
-            Intent intent=new Intent(this,LoginPage.class);
+            Intent intent=new Intent(this, LoginPageActivity.class);
             startActivityForResult(intent, 0);
             //Toast.makeText(this,"you selected login",Toast.LENGTH_LONG).show();
             return true;
         }
         else if (id == R.id.action_register) {
-            Intent intent = new Intent(this, SignUp.class);
+            Intent intent = new Intent(this, SignUpActivity.class);
             startActivityForResult(intent, 0);
             return true;
         }

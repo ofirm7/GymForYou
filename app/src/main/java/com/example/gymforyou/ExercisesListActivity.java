@@ -74,7 +74,7 @@ public class ExercisesListActivity extends AppCompatActivity implements View.OnC
                         .setCancelable(false)
                         .setPositiveButton("Login", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-                                Intent intent = new Intent(ExercisesListActivity.this, LoginPage.class);
+                                Intent intent = new Intent(ExercisesListActivity.this, LoginPageActivity.class);
                                 startActivityForResult(intent, 0);
                             }
                         })
@@ -192,13 +192,13 @@ public class ExercisesListActivity extends AppCompatActivity implements View.OnC
         int id = item.getItemId();
 
         if (id == R.id.action_login) {
-            Intent intent=new Intent(this,LoginPage.class);
+            Intent intent=new Intent(this, LoginPageActivity.class);
             startActivityForResult(intent, 0);
             //Toast.makeText(this,"you selected login",Toast.LENGTH_LONG).show();
             return true;
         }
         else if (id == R.id.action_register) {
-        Intent intent = new Intent(this, SignUp.class);
+        Intent intent = new Intent(this, SignUpActivity.class);
         startActivityForResult(intent, 0);
         return true;
         }

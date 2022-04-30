@@ -1,6 +1,5 @@
 package com.example.gymforyou;
 
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
@@ -19,7 +18,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.Locale;
 
 public class TrainingPlansListActivity extends AppCompatActivity implements View.OnClickListener, AdapterView.OnItemClickListener {
 
@@ -223,12 +221,12 @@ public class TrainingPlansListActivity extends AppCompatActivity implements View
         int id = item.getItemId();
 
         if (id == R.id.action_login) {
-            Intent intent = new Intent(this, LoginPage.class);
+            Intent intent = new Intent(this, LoginPageActivity.class);
             startActivityForResult(intent, 0);
             //Toast.makeText(this,"you selected login",Toast.LENGTH_LONG).show();
             return true;
         } else if (id == R.id.action_register) {
-            Intent intent = new Intent(this, SignUp.class);
+            Intent intent = new Intent(this, SignUpActivity.class);
             startActivityForResult(intent, 0);
             return true;
         } else if (id == R.id.action_exit) {

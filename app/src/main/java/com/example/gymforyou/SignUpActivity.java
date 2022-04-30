@@ -4,7 +4,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
-import android.icu.lang.UScript;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,7 +18,7 @@ import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class SignUp extends AppCompatActivity implements View.OnClickListener {
+public class SignUpActivity extends AppCompatActivity implements View.OnClickListener {
 
     Button submit, toLoginFromSignUp;
     EditText email, username, pass, passConfirmation, phoneNumber;
@@ -123,7 +122,7 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
                 finish();
             }
         } else if (view == toLoginFromSignUp) {
-            Intent intent = new Intent(this, LoginPage.class);
+            Intent intent = new Intent(this, LoginPageActivity.class);
             startActivity(intent);
             finish();
         }
@@ -192,12 +191,12 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
         int id = item.getItemId();
 
         if (id == R.id.action_login) {
-            Intent intent = new Intent(this, LoginPage.class);
+            Intent intent = new Intent(this, LoginPageActivity.class);
             startActivityForResult(intent, 0);
             //Toast.makeText(this,"you selected login",Toast.LENGTH_LONG).show();
             return true;
         } else if (id == R.id.action_register) {
-            Intent intent = new Intent(this, SignUp.class);
+            Intent intent = new Intent(this, SignUpActivity.class);
             startActivityForResult(intent, 0);
             return true;
         } else if (id == R.id.action_exit) {

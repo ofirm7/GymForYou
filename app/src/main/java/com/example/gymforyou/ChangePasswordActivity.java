@@ -11,6 +11,7 @@ import android.telephony.TelephonyManager;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import java.util.Random;
 
@@ -59,20 +60,31 @@ public class ChangePasswordActivity extends AppCompatActivity implements View.On
         }
         else if (view == submitBT)
         {
-            if (newPasswordET.getText().toString() != "")
+            if (code == Integer.parseInt(codeET.getText().toString()))
             {
-                int pos = findPosOfUser();
-                if (!isAdmin)
-                {
-                    DataModel.users.get(pos).setPassword(newPasswordET.getText().toString());
-                    DataModel.userSave();
+                if (newPasswordET.getText().toString().length() < 6 || newPasswordET.getText().toString().length() > 18 ||
+                        newPasswordET.getText().toString().contains(" ")) {
+                    Toast.makeText(this, "password isn't valid", Toast.LENGTH_SHORT).show();
                 }
                 else
                 {
-                    DataModel.admins .get(pos).setPassword(newPasswordET.getText().toString());
-                    DataModel.adminsSave();
+                    int pos = findPosOfUser();
+                    if (!isAdmin)
+                    {
+                        DataModel.users.get(pos).setPassword(newPasswordET.getText().toString());
+                        DataModel.userSave();
+                    }
+                    else
+                    {
+                        DataModel.admins .get(pos).setPassword(newPasswordET.getText().toString());
+                        DataModel.adminsSave();
+                    }
                 }
             }
+            else{
+                Toast.makeText(this, "Code isn't match! Try Again!", Toast.LENGTH_SHORT).show();
+            }
+
         }
     }
 
